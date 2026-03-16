@@ -105,8 +105,11 @@ function getVerseTranslation(verse: typeof versesOfTheDay[0], lang: string) {
 }
 
 export default function Index() {
-  const { readingProgress, settings } = useApp();
+  const { readingProgress, settings, audio, togglePlayback, setAudio } = useApp();
   const hijriDate = useHijriDate();
+  const lang = settings.language || "fr";
+  const t = labels[lang as keyof typeof labels] || labels.fr;
+  const audioSurah = audio.currentSurahId ? surahs.find(s => s.id === audio.currentSurahId) : null;
   const lang = settings.language || "fr";
   const t = labels[lang as keyof typeof labels] || labels.fr;
 
