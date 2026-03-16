@@ -1,9 +1,10 @@
 import { useApp } from "@/contexts/AppContext";
 import { surahs } from "@/data/surahs";
 import { Link } from "react-router-dom";
-import { BookOpen, ChevronRight, Sparkles, CalendarDays } from "lucide-react";
+import { BookOpen, ChevronRight, Sparkles, CalendarDays, Play, Pause, SkipBack, SkipForward, X, Headphones } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useMemo } from "react";
+import { toArabicNumber } from "@/data/ayahs";
 
 function useHijriDate() {
   return useMemo(() => {
@@ -72,6 +73,8 @@ const labels = {
     selectedSurahs: "Sourates recommandées",
     viewAll: "Voir tout",
     versets: "versets",
+    nowPlaying: "En cours d'écoute",
+    ayahLabel: "Verset",
   },
   ar: {
     continueReading: "متابعة القراءة",
@@ -80,6 +83,8 @@ const labels = {
     selectedSurahs: "سور مختارة",
     viewAll: "عرض الكل",
     versets: "آيات",
+    nowPlaying: "قيد الاستماع",
+    ayahLabel: "الآية",
   },
   en: {
     continueReading: "Continue reading",
@@ -88,6 +93,8 @@ const labels = {
     selectedSurahs: "Recommended Surahs",
     viewAll: "View all",
     versets: "verses",
+    nowPlaying: "Now playing",
+    ayahLabel: "Ayah",
   },
 };
 
@@ -98,10 +105,11 @@ function getVerseTranslation(verse: typeof versesOfTheDay[0], lang: string) {
 }
 
 export default function Index() {
-  const { readingProgress, settings } = useApp();
+  const { readingProgress, settings, audio, togglePlayback, setAudio } = useApp();
   const hijriDate = useHijriDate();
   const lang = settings.language || "fr";
   const t = labels[lang as keyof typeof labels] || labels.fr;
+  const audioSurah = audio.currentSurahId ? surahs.find(s => s.id === audio.currentSurahId) : null;
 
   const lastSurah = readingProgress
     ? surahs.find(s => s.id === readingProgress.surahId)
@@ -145,7 +153,42 @@ export default function Index() {
         </Link>
       )}
 
-      {/* Verse of the Day — light style */}
+      {/* Now Playing */}
+      {audioSurah && audio.currentSurahId && (
+        <Card className="p-4 border-border/50 bg-card">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
+              <Headphones className="h-5 w-5 text-accent" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-muted-foreground mb-0.5">{t.nowPlaying}</p>
+              <p className="font-semibold text-sm truncate">
+                {audioSurah.nameTransliteration}
+                <span className="font-arabic text-muted-foreground mx-1.5">—</span>
+                <span className="font-arabic text-accent">{audioSurah.nameArabic}</span>
+              </p>
+              <p className="text-xs text-muted-foreground font-arabic">
+                {t.ayahLabel} {toArabicNumber(audio.currentAyah || 1)}
+              </p>
+            </div>
+            <div className="flex items-center gap-0.5 shrink-0">
+              <button onClick={() => setAudio(prev => ({ ...prev, currentAyah: Math.max(1, (prev.currentAyah || 1) - 1) }))} className="h-8 w-8 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors">
+                <SkipBack className="h-3.5 w-3.5" />
+              </button>
+              <button onClick={togglePlayback} className="h-9 w-9 flex items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
+                {audio.isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 ml-px" />}
+              </button>
+              <button onClick={() => setAudio(prev => ({ ...prev, currentAyah: (prev.currentAyah || 1) + 1 }))} className="h-8 w-8 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors">
+                <SkipForward className="h-3.5 w-3.5" />
+              </button>
+              <button onClick={() => { setAudio(prev => ({ ...prev, isPlaying: false, currentSurahId: null, currentAyah: null })); }} className="h-7 w-7 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors ml-1">
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          </div>
+        </Card>
+      )}
+
       <Link to={`/surah/${todayVerse.surahId}`} className="block mt-4">
         <Card className="overflow-hidden border-border/50 hover-scale">
           <div className="px-5 py-5 text-center">
