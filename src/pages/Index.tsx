@@ -172,17 +172,14 @@ export default function Index() {
               </p>
             </div>
             <div className="flex items-center gap-0.5 shrink-0">
-              <button onClick={() => setAudio(prev => ({ ...prev, currentAyah: Math.max(1, (prev.currentAyah || 1) - 1) }))} className="h-8 w-8 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors">
+              <button onClick={() => setAudio(prev => ({ ...prev, currentSurahId: Math.max(1, (prev.currentSurahId || 1) - 1), currentAyah: 1 }))} className="h-8 w-8 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors">
                 <SkipBack className="h-3.5 w-3.5" />
               </button>
               <button onClick={togglePlayback} className="h-9 w-9 flex items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
                 {audio.isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 ml-px" />}
               </button>
-              <button onClick={() => setAudio(prev => ({ ...prev, currentAyah: (prev.currentAyah || 1) + 1 }))} className="h-8 w-8 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors">
+              <button onClick={() => setAudio(prev => ({ ...prev, currentSurahId: Math.min(114, (prev.currentSurahId || 1) + 1), currentAyah: 1 }))} className="h-8 w-8 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors">
                 <SkipForward className="h-3.5 w-3.5" />
-              </button>
-              <button onClick={() => { setAudio(prev => ({ ...prev, isPlaying: false, currentSurahId: null, currentAyah: null })); }} className="h-7 w-7 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors ml-1">
-                <X className="h-3.5 w-3.5" />
               </button>
             </div>
           </div>
