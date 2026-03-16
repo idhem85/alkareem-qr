@@ -1,0 +1,62 @@
+import { Play, Pause, SkipBack, SkipForward, X } from "lucide-react";
+import { useApp } from "@/contexts/AppContext";
+import { surahs } from "@/data/surahs";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+export function AudioPlayer() {
+  const { audio, togglePlayback, setAudio } = useApp();
+
+  if (!audio.currentSurahId) return null;
+
+  const surah = surahs.find(s => s.id === audio.currentSurahId);
+
+  return (
+    <div className={cn(
+      "fixed bottom-14 md:bottom-0 left-0 right-0 z-40 frosted-glass animate-slide-up",
+      "md:left-56"
+    )}>
+      <div className="flex items-center gap-3 px-4 py-3 max-w-screen-lg mx-auto">
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium truncate">{surah?.nameTransliteration}</p>
+          <p className="text-xs text-muted-foreground truncate">
+            {audio.reciter} • Ayah {audio.currentAyah || 1}
+          </p>
+        </div>
+
+        <div className="flex items-center gap-1">
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => {
+            setAudio(prev => ({
+              ...prev,
+              currentAyah: Math.max(1, (prev.currentAyah || 1) - 1)
+            }));
+          }}>
+            <SkipBack className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-10 w-10 rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
+            onClick={togglePlayback}
+          >
+            {audio.isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 ml-0.5" />}
+          </Button>
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => {
+            setAudio(prev => ({
+              ...prev,
+              currentAyah: (prev.currentAyah || 1) + 1
+            }));
+          }}>
+            <SkipForward className="h-4 w-4" />
+          </Button>
+        </div>
+
+        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => {
+          setAudio(prev => ({ ...prev, isPlaying: false, currentSurahId: null, currentAyah: null }));
+        }}>
+          <X className="h-4 w-4" />
+        </Button>
+      </div>
+    </div>
+  );
+}
