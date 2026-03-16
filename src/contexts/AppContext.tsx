@@ -25,6 +25,7 @@ interface Settings {
   showTranslation: boolean;
   translationLang: string;
   reciter: string;
+  language: string;
 }
 
 interface AppContextType {
@@ -75,6 +76,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       showTranslation: true,
       translationLang: "fr",
       reciter: "Mishary Rashid Alafasy",
+      language: "fr",
     };
   });
 

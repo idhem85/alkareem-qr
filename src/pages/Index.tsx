@@ -35,7 +35,7 @@ export default function Index() {
       <div className="text-center py-4">
         <p className="font-arabic text-2xl text-accent mb-1">{getGreeting()}</p>
         <h1 className="text-2xl font-bold font-sans">السلام عليكم</h1>
-        <p className="text-sm text-muted-foreground mt-1">Bienvenue sur Al-Mushaf</p>
+        <p className="text-sm text-muted-foreground mt-1">تراتيل — Tarātīl</p>
       </div>
 
       {/* Continue Reading */}
