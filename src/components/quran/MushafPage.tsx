@@ -136,22 +136,6 @@ export function MushafPage({ page, onAyahTap, selectedAyahId }: MushafPageProps)
         <span className="mushaf-page-number font-arabic">
           {toArabicNumber(page.pageNumber)}
         </span>
-        {/* Mini audio controls */}
-        {audio.currentSurahId ? (
-          <div className="flex items-center gap-0.5" onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => setAudio(prev => ({ ...prev, currentSurahId: Math.max(1, (prev.currentSurahId || 1) - 1), currentAyah: 1 }))} className="h-6 w-6 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors">
-              <SkipBack className="h-3 w-3" />
-            </button>
-            <button onClick={togglePlayback} className="h-7 w-7 flex items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
-              {audio.isPlaying ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3 ml-px" />}
-            </button>
-            <button onClick={() => setAudio(prev => ({ ...prev, currentSurahId: Math.min(114, (prev.currentSurahId || 1) + 1), currentAyah: 1 }))} className="h-6 w-6 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors">
-              <SkipForward className="h-3 w-3" />
-            </button>
-          </div>
-        ) : (
-          <span />
-        )}
         <span className="font-arabic text-[10px] text-muted-foreground">
           {page.hizbInfo}
         </span>
