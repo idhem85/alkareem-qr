@@ -25,6 +25,7 @@ interface Settings {
   showTranslation: boolean;
   translationLang: string;
   reciter: string;
+  language: string;
 }
 
 interface AppContextType {
