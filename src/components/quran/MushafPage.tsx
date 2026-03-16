@@ -59,21 +59,24 @@ export function MushafPage({ page, onAyahTap, selectedAyahId }: MushafPageProps)
             return (
               <div key={`header-${segIdx}`} className="mushaf-surah-header-block">
                 <div className="mushaf-surah-title-frame">
-                  <div className="mushaf-surah-title-inner">
+                  <div className="mushaf-surah-title-inner flex flex-col items-center gap-1 py-2">
                     <span className="font-arabic text-lg leading-relaxed">
                       سُورَةُ {segment.surah.nameArabic}
                     </span>
-                    <span className="text-[10px] opacity-70 mt-0.5 block">
-                      {segment.surah.ayahCount} versets
-                    </span>
+                    <div className="flex items-center gap-3 mt-0.5">
+                      <span className="text-[10px] opacity-70">
+                        {segment.surah.ayahCount} versets
+                      </span>
+                      <button
+                        onClick={handlePlay}
+                        className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary/20 text-primary hover:bg-primary/30 transition-colors text-[10px] font-medium"
+                        aria-label={isPlayingThis ? "Pause" : "Écouter la sourate"}
+                      >
+                        {isPlayingThis ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
+                        {isPlayingThis ? "Pause" : "Écouter"}
+                      </button>
+                    </div>
                   </div>
-                  <button
-                    onClick={handlePlay}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 flex items-center justify-center w-7 h-7 rounded-full bg-primary/15 text-primary hover:bg-primary/25 transition-colors"
-                    aria-label={isPlayingThis ? "Pause" : "Écouter la sourate"}
-                  >
-                    {isPlayingThis ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5 ml-0.5" />}
-                  </button>
                 </div>
               </div>
             );
