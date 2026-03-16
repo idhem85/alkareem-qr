@@ -76,6 +76,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       showTranslation: true,
       translationLang: "fr",
       reciter: "Mishary Rashid Alafasy",
+      language: "fr",
     };
   });
 

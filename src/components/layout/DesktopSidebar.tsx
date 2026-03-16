@@ -28,7 +28,7 @@ export function DesktopSidebar() {
             <div className="w-8 h-8 rounded-lg gold-gradient flex items-center justify-center">
               <BookOpen className="h-4 w-4 text-sidebar-primary-foreground" />
             </div>
-            <span className="font-arabic text-lg font-bold text-sidebar-foreground">المصحف</span>
+            <span className="font-arabic text-lg font-bold text-sidebar-foreground">تراتيل</span>
           </div>
         )}
         {collapsed && (
