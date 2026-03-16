@@ -1,9 +1,10 @@
 import { useApp } from "@/contexts/AppContext";
 import { surahs } from "@/data/surahs";
 import { Link } from "react-router-dom";
-import { BookOpen, ChevronRight, Sparkles, CalendarDays } from "lucide-react";
+import { BookOpen, ChevronRight, Sparkles, CalendarDays, Play, Pause, SkipBack, SkipForward, X, Headphones } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useMemo } from "react";
+import { toArabicNumber } from "@/data/ayahs";
 
 function useHijriDate() {
   return useMemo(() => {
