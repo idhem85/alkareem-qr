@@ -177,13 +177,15 @@ export default function MushafReader() {
     );
   }
 
-  if (pages.length === 0) {
+  if (loading || pages.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
         <p className="font-arabic text-4xl text-accent">{surah.nameArabic}</p>
-        <p className="text-muted-foreground text-sm">
-          Le contenu de cette sourate sera disponible prochainement.
-        </p>
+        {loading ? (
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        ) : (
+          <p className="text-muted-foreground text-sm">Contenu indisponible.</p>
+        )}
       </div>
     );
   }
