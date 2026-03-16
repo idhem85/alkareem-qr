@@ -63,16 +63,22 @@ export function MushafPage({ page, onAyahTap, selectedAyahId }: MushafPageProps)
                     <span className="font-arabic text-lg leading-relaxed">
                       سُورَةُ {segment.surah.nameArabic}
                     </span>
-                    <div className="flex items-center gap-3 mt-0.5">
+                    <div className="flex items-center gap-2.5 mt-1">
                       <span className="text-[10px] opacity-70">
                         {segment.surah.ayahCount} versets
                       </span>
+                      <span className="text-[10px] opacity-40">•</span>
                       <button
                         onClick={handlePlay}
-                        className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-background text-primary border border-primary/30 hover:bg-primary/10 transition-colors text-[10px] font-medium shadow-sm"
+                        className={cn(
+                          "flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold shadow-sm transition-all",
+                          isPlayingThis
+                            ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                            : "bg-background text-primary border border-primary/30 hover:bg-primary hover:text-primary-foreground"
+                        )}
                         aria-label={isPlayingThis ? "Pause" : "Écouter la sourate"}
                       >
-                        {isPlayingThis ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
+                        {isPlayingThis ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
                         {isPlayingThis ? "Pause" : "Écouter"}
                       </button>
                     </div>
