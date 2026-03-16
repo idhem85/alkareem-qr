@@ -4,10 +4,12 @@ import { surahs } from "@/data/surahs";
 import { AyahDrawer } from "@/components/quran/AyahDrawer";
 import { ReadingToolbar } from "@/components/quran/ReadingToolbar";
 import { MushafPage } from "@/components/quran/MushafPage";
+import { MushafLoadingSkeleton } from "@/components/quran/MushafLoadingSkeleton";
+import { MushafErrorState } from "@/components/quran/MushafErrorState";
 import { useApp } from "@/contexts/AppContext";
 import type { Ayah } from "@/data/ayahs";
 import { useAyahs, prefetchSurah } from "@/hooks/useAyahs";
-import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PageContent {
   pageNumber: number;
@@ -28,24 +30,20 @@ interface PageSegment {
 
 function buildPagesForSurah(surahId: number, allAyahs: Ayah[]): PageContent[] {
   const surah = surahs.find(s => s.id === surahId);
-  if (!surah) return [];
-  if (allAyahs.length === 0) return [];
+  if (!surah || allAyahs.length === 0) return [];
 
   const AYAHS_PER_PAGE = 8;
   const pages: PageContent[] = [];
   let currentAyahIndex = 0;
 
   while (currentAyahIndex < allAyahs.length) {
-    const pageNumber = pages.length + 1;
     const segments: PageSegment[] = [];
 
-    // First page gets surah header + bismillah
     if (currentAyahIndex === 0) {
       segments.push({ type: "surah-header", surahId, surah });
       if (surahId !== 1 && surahId !== 9) {
         segments.push({ type: "bismillah" });
       }
-      // First page has fewer ayahs due to header
       const firstPageCount = Math.max(4, AYAHS_PER_PAGE - 2);
       const pageAyahs = allAyahs.slice(currentAyahIndex, currentAyahIndex + firstPageCount);
       segments.push({ type: "ayahs", ayahs: pageAyahs, surahId });
@@ -56,21 +54,18 @@ function buildPagesForSurah(surahId: number, allAyahs: Ayah[]): PageContent[] {
       currentAyahIndex += AYAHS_PER_PAGE;
     }
 
-    // Determine juz (simplified mapping)
     const juz = Math.ceil(surahId / 4) || 1;
-    
+
     pages.push({
-      pageNumber,
+      pageNumber: pages.length + 1,
       surahId,
       surahName: surah.nameTransliteration,
       surahNameArabic: surah.nameArabic,
       juzNumber: Math.min(juz, 30),
-      hizbInfo: `½ Hizb ${juz * 2}`,
+      hizbInfo: `½ حزب ${juz * 2}`,
       segments,
     });
   }
-
-  // Next surah transition is handled by navigation, not inline anymore
 
   return pages;
 }
@@ -92,22 +87,18 @@ export default function MushafReader() {
 
   const pages = useMemo(() => buildPagesForSurah(surahId, ayahs), [surahId, ayahs]);
 
-  // Prefetch next surah
-  useEffect(() => {
-    prefetchSurah(surahId + 1);
-  }, [surahId]);
+  useEffect(() => { prefetchSurah(surahId + 1); }, [surahId]);
 
   useEffect(() => {
     setCurrentPageIndex(0);
     if (surah) updateReadingProgress(surahId, 1);
   }, [surahId]);
 
-  // Auto-hide toolbar
   useEffect(() => {
     const showToolbar = () => {
       setToolbarVisible(true);
       clearTimeout(hideTimer.current);
-      hideTimer.current = setTimeout(() => setToolbarVisible(false), 3000);
+      hideTimer.current = setTimeout(() => setToolbarVisible(false), 3500);
     };
     showToolbar();
     return () => clearTimeout(hideTimer.current);
@@ -125,22 +116,16 @@ export default function MushafReader() {
   }, [pages, updateReadingProgress]);
 
   const goToPrevPage = useCallback(() => {
-    if (currentPageIndex > 0) {
-      goToPage(currentPageIndex - 1);
-    } else if (surahId > 1) {
-      navigate(`/surah/${surahId - 1}`);
-    }
+    if (currentPageIndex > 0) goToPage(currentPageIndex - 1);
+    else if (surahId > 1) navigate(`/surah/${surahId - 1}`);
   }, [currentPageIndex, goToPage, surahId, navigate]);
 
   const goToNextPage = useCallback(() => {
-    if (currentPageIndex < pages.length - 1) {
-      goToPage(currentPageIndex + 1);
-    } else if (surahId < 114) {
-      navigate(`/surah/${surahId + 1}`);
-    }
+    if (currentPageIndex < pages.length - 1) goToPage(currentPageIndex + 1);
+    else if (surahId < 114) navigate(`/surah/${surahId + 1}`);
   }, [currentPageIndex, pages.length, goToPage, surahId, navigate]);
 
-  // Swipe handling
+  // Swipe (RTL: swipe left → next page, swipe right → prev page)
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
@@ -152,49 +137,38 @@ export default function MushafReader() {
     const dx = e.changedTouches[0].clientX - touchStart.current.x;
     const dy = e.changedTouches[0].clientY - touchStart.current.y;
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
-      // RTL: swipe left = next, swipe right = prev (reversed for RTL)
       if (dx < 0) goToNextPage();
       else goToPrevPage();
     }
     touchStart.current = null;
   }, [goToNextPage, goToPrevPage]);
 
-  // Keyboard navigation
+  // Keyboard navigation (RTL aware)
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowLeft") goToNextPage(); // RTL
+      if (e.key === "ArrowLeft") goToNextPage();
       if (e.key === "ArrowRight") goToPrevPage();
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [goToNextPage, goToPrevPage]);
 
+  // Not found
   if (!surah) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <p className="text-muted-foreground">Sourate non trouvée.</p>
-      </div>
-    );
+    return <MushafErrorState message="سورة غير موجودة — Sourate non trouvée." />;
   }
 
+  // Loading
   if (loading || pages.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-        <p className="font-arabic text-4xl text-accent">{surah.nameArabic}</p>
-        {loading ? (
-          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-        ) : (
-          <p className="text-muted-foreground text-sm">Contenu indisponible.</p>
-        )}
-      </div>
-    );
+    if (loading) return <MushafLoadingSkeleton surahNameArabic={surah.nameArabic} />;
+    return <MushafErrorState message="المحتوى غير متاح — Contenu indisponible." onRetry={() => window.location.reload()} />;
   }
 
   const currentPage = pages[currentPageIndex];
 
   return (
     <div className="mushaf-container animate-fade-in" ref={containerRef}>
-      {/* Toolbar - auto-hiding */}
+      {/* Toolbar */}
       <div
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
           toolbarVisible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
@@ -203,6 +177,7 @@ export default function MushafReader() {
       >
         <ReadingToolbar
           surahName={currentPage.surahName}
+          surahNameArabic={currentPage.surahNameArabic}
           juzNumber={currentPage.juzNumber}
           pageNumber={currentPageIndex + 1}
           totalPages={pages.length}
@@ -227,32 +202,34 @@ export default function MushafReader() {
         />
       </div>
 
-      {/* Page navigation arrows - desktop */}
+      {/* Desktop nav arrows */}
       <button
         onClick={(e) => { e.stopPropagation(); goToPrevPage(); }}
         className="mushaf-nav-btn mushaf-nav-right"
-        aria-label="Page précédente"
+        aria-label="الصفحة السابقة"
       >
         <ChevronRight className="h-5 w-5" />
       </button>
       <button
         onClick={(e) => { e.stopPropagation(); goToNextPage(); }}
         className="mushaf-nav-btn mushaf-nav-left"
-        aria-label="Page suivante"
+        aria-label="الصفحة التالية"
       >
         <ChevronLeft className="h-5 w-5" />
       </button>
 
-      {/* Page indicator dots */}
-      <div className="mushaf-page-indicator">
-        {pages.map((_, i) => (
-          <button
-            key={i}
-            onClick={(e) => { e.stopPropagation(); goToPage(i); }}
-            className={`mushaf-dot ${i === currentPageIndex ? "mushaf-dot-active" : ""}`}
-          />
-        ))}
-      </div>
+      {/* Page dots */}
+      {pages.length <= 40 && (
+        <div className="mushaf-page-indicator">
+          {pages.map((_, i) => (
+            <button
+              key={i}
+              onClick={(e) => { e.stopPropagation(); goToPage(i); }}
+              className={`mushaf-dot ${i === currentPageIndex ? "mushaf-dot-active" : ""}`}
+            />
+          ))}
+        </div>
+      )}
 
       <AyahDrawer ayah={selectedAyah} open={drawerOpen} onOpenChange={setDrawerOpen} />
     </div>

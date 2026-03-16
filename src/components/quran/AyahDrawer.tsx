@@ -29,16 +29,16 @@ export function AyahDrawer({ ayah, open, onOpenChange }: AyahDrawerProps) {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(ayah.textArabic);
-    toast({ title: "Copié", description: "Le verset a été copié dans le presse-papier." });
+    toast({ title: "تم النسخ", description: "تم نسخ الآية إلى الحافظة." });
   };
 
   const handleBookmark = () => {
     if (bookmarked) {
       removeBookmark(ayah.surahId, ayah.numberInSurah);
-      toast({ title: "Signet retiré" });
+      toast({ title: "تم إزالة العلامة" });
     } else {
       addBookmark(ayah.surahId, ayah.numberInSurah);
-      toast({ title: "Signet ajouté" });
+      toast({ title: "تم حفظ العلامة" });
     }
   };
 
@@ -52,52 +52,68 @@ export function AyahDrawer({ ayah, open, onOpenChange }: AyahDrawerProps) {
     onOpenChange(false);
   };
 
+  const handleShare = async () => {
+    const text = `${ayah.textArabic}\n\n${ayah.translationFr}\n\n— ${surah?.nameTransliteration} ${ayah.surahId}:${ayah.numberInSurah}`;
+    if (navigator.share) {
+      try { await navigator.share({ text }); } catch {}
+    } else {
+      navigator.clipboard.writeText(text);
+      toast({ title: "تم النسخ للمشاركة" });
+    }
+  };
+
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerContent>
+      <DrawerContent className="max-h-[85vh]">
         <DrawerHeader className="text-center pb-2">
           <div className="flex items-center justify-between">
-            <DrawerTitle className="text-sm text-muted-foreground">
-              {surah?.nameTransliteration} • Ayah {toArabicNumber(ayah.numberInSurah)}
-            </DrawerTitle>
             <DrawerClose asChild>
               <Button variant="ghost" size="icon" className="h-8 w-8">
                 <X className="h-4 w-4" />
               </Button>
             </DrawerClose>
+            <DrawerTitle className="text-sm text-muted-foreground font-arabic">
+              {surah?.nameArabic} • الآية {toArabicNumber(ayah.numberInSurah)}
+            </DrawerTitle>
           </div>
-          <p className="font-quran text-xl mt-3 leading-relaxed" dir="rtl">{ayah.textArabic}</p>
+          <p className="font-quran text-xl mt-3 leading-[2.4]" dir="rtl">{ayah.textArabic}</p>
         </DrawerHeader>
 
         <div className="grid grid-cols-4 gap-2 px-4 py-3 border-b border-border">
-          <Button variant="outline" size="sm" className="flex flex-col items-center gap-1 h-auto py-2 px-1 text-[10px]" onClick={handleCopy}>
-            <Copy className="h-4 w-4" />
-            Copier
-          </Button>
-          <Button variant="outline" size="sm" className="flex flex-col items-center gap-1 h-auto py-2 px-1 text-[10px]" onClick={handleBookmark}>
-            {bookmarked ? <BookmarkCheck className="h-4 w-4" /> : <Bookmark className="h-4 w-4" />}
-            {bookmarked ? "Retiré" : "Signet"}
-          </Button>
           <Button variant="outline" size="sm" className="flex flex-col items-center gap-1 h-auto py-2 px-1 text-[10px]" onClick={handlePlay}>
             <Play className="h-4 w-4" />
-            Écouter
+            استماع
           </Button>
-          <Button variant="outline" size="sm" className="flex flex-col items-center gap-1 h-auto py-2 px-1 text-[10px]">
+          <Button variant="outline" size="sm" className="flex flex-col items-center gap-1 h-auto py-2 px-1 text-[10px]" onClick={handleCopy}>
+            <Copy className="h-4 w-4" />
+            نسخ
+          </Button>
+          <Button variant="outline" size="sm" className="flex flex-col items-center gap-1 h-auto py-2 px-1 text-[10px]" onClick={handleBookmark}>
+            {bookmarked ? <BookmarkCheck className="h-4 w-4 text-accent" /> : <Bookmark className="h-4 w-4" />}
+            {bookmarked ? "محفوظ" : "حفظ"}
+          </Button>
+          <Button variant="outline" size="sm" className="flex flex-col items-center gap-1 h-auto py-2 px-1 text-[10px]" onClick={handleShare}>
             <Share2 className="h-4 w-4" />
-            Partager
+            مشاركة
           </Button>
         </div>
 
-        <Tabs defaultValue="translation" className="p-4">
+        <Tabs defaultValue="translation" className="p-4 overflow-y-auto">
           <TabsList className="w-full">
-            <TabsTrigger value="translation" className="flex-1">Traduction</TabsTrigger>
-            <TabsTrigger value="tafsir" className="flex-1">Tafsir</TabsTrigger>
+            <TabsTrigger value="translation" className="flex-1">الترجمة</TabsTrigger>
+            <TabsTrigger value="tafsir" className="flex-1">التفسير</TabsTrigger>
           </TabsList>
           <TabsContent value="translation" className="mt-4">
             <p className="text-sm leading-relaxed text-foreground">{ayah.translationFr}</p>
           </TabsContent>
           <TabsContent value="tafsir" className="mt-4">
-            <p className="text-sm leading-relaxed text-foreground">{ayah.tafsir}</p>
+            {ayah.tafsir ? (
+              <p className="text-sm leading-relaxed text-foreground">{ayah.tafsir}</p>
+            ) : (
+              <p className="text-sm text-muted-foreground text-center py-6">
+                التفسير غير متوفر حالياً
+              </p>
+            )}
           </TabsContent>
         </Tabs>
       </DrawerContent>

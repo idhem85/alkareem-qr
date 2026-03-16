@@ -2,6 +2,7 @@ import { useRef, useEffect } from "react";
 import { Play, Pause, SkipBack, SkipForward, X } from "lucide-react";
 import { useApp } from "@/contexts/AppContext";
 import { surahs } from "@/data/surahs";
+import { toArabicNumber } from "@/data/ayahs";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getAyahAudioUrl } from "@/lib/quranAudio";
@@ -10,11 +11,9 @@ export function AudioPlayer() {
   const { audio, togglePlayback, setAudio } = useApp();
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Create audio element once
   useEffect(() => {
     audioRef.current = new Audio();
     audioRef.current.addEventListener("ended", () => {
-      // Auto-advance to next ayah
       setAudio(prev => {
         if (!prev.currentSurahId || !prev.currentAyah) return prev;
         const surah = surahs.find(s => s.id === prev.currentSurahId);
@@ -30,7 +29,6 @@ export function AudioPlayer() {
     };
   }, [setAudio]);
 
-  // Update source when surah/ayah changes
   useEffect(() => {
     if (!audioRef.current || !audio.currentSurahId || !audio.currentAyah) return;
     const url = getAyahAudioUrl(audio.currentSurahId, audio.currentAyah);
@@ -40,7 +38,6 @@ export function AudioPlayer() {
     }
   }, [audio.currentSurahId, audio.currentAyah]);
 
-  // Play/pause
   useEffect(() => {
     if (!audioRef.current || !audio.currentSurahId) return;
     if (audio.isPlaying) {
@@ -56,18 +53,21 @@ export function AudioPlayer() {
 
   return (
     <div className={cn(
-      "fixed bottom-14 md:bottom-0 left-0 right-0 z-40 frosted-glass animate-slide-up",
-      "md:left-56"
+      "fixed z-40 frosted-glass animate-slide-up",
+      "bottom-14 left-0 right-0",
+      "md:bottom-0 md:left-56"
     )}>
-      <div className="flex items-center gap-3 px-4 py-3 max-w-screen-lg mx-auto">
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium truncate">{surah?.nameTransliteration}</p>
-          <p className="text-xs text-muted-foreground truncate">
-            {audio.reciter} • Ayah {audio.currentAyah || 1}
+      <div className="flex items-center gap-3 px-4 py-2.5 max-w-screen-lg mx-auto">
+        {/* Info */}
+        <div className="flex-1 min-w-0" dir="rtl">
+          <p className="text-sm font-medium truncate font-arabic">{surah?.nameArabic}</p>
+          <p className="text-xs text-muted-foreground truncate font-arabic">
+            الآية {toArabicNumber(audio.currentAyah || 1)}
           </p>
         </div>
 
-        <div className="flex items-center gap-1">
+        {/* Controls */}
+        <div className="flex items-center gap-0.5">
           <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => {
             setAudio(prev => ({
               ...prev,
@@ -94,7 +94,8 @@ export function AudioPlayer() {
           </Button>
         </div>
 
-        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => {
+        {/* Close */}
+        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground shrink-0" onClick={() => {
           audioRef.current?.pause();
           setAudio(prev => ({ ...prev, isPlaying: false, currentSurahId: null, currentAyah: null }));
         }}>
