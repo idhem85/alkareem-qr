@@ -108,9 +108,13 @@ export default function Index() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-6 space-y-6 animate-fade-in">
-      {/* Logo */}
-      <div className="text-center py-4">
-        <img src="/logo.png" alt="تراتيل — Tarātīl" className="h-36 mx-auto" />
+      {/* Header */}
+      <div className="flex items-center justify-between py-3">
+        <img src="/logo.png" alt="تراتيل — Tarātīl" className="h-14" />
+        <div className="flex items-center gap-2 bg-card border border-border/60 rounded-xl px-3 py-2">
+          <CalendarDays className="h-4 w-4 text-accent shrink-0" />
+          <span className="font-arabic text-sm text-foreground" dir="rtl">{hijriDate}</span>
+        </div>
       </div>
 
       {/* Continue Reading */}
