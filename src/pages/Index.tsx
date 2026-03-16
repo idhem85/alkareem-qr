@@ -15,12 +15,6 @@ const verseDuJour = {
 
 const recentSurahs = [1, 36, 112, 113, 114];
 
-function getGreeting() {
-  const hour = new Date().getHours();
-  if (hour < 12) return "صباح الخير";
-  if (hour < 17) return "مساء الخير";
-  return "مساء النور";
-}
 
 export default function Index() {
   const { readingProgress } = useApp();
