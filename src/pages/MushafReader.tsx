@@ -26,11 +26,9 @@ interface PageSegment {
   ayahs?: Ayah[];
 }
 
-function buildPagesForSurah(surahId: number): PageContent[] {
+function buildPagesForSurah(surahId: number, allAyahs: Ayah[]): PageContent[] {
   const surah = surahs.find(s => s.id === surahId);
   if (!surah) return [];
-
-  const allAyahs = ayahsBySurah[surahId] || [];
   if (allAyahs.length === 0) return [];
 
   const AYAHS_PER_PAGE = 8;
