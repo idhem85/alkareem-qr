@@ -1,13 +1,13 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { surahs } from "@/data/surahs";
-import { ayahsBySurah } from "@/data/ayahs";
 import { AyahDrawer } from "@/components/quran/AyahDrawer";
 import { ReadingToolbar } from "@/components/quran/ReadingToolbar";
 import { MushafPage } from "@/components/quran/MushafPage";
 import { useApp } from "@/contexts/AppContext";
 import type { Ayah } from "@/data/ayahs";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useAyahs, prefetchSurah } from "@/hooks/useAyahs";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 
 interface PageContent {
   pageNumber: number;
@@ -26,11 +26,9 @@ interface PageSegment {
   ayahs?: Ayah[];
 }
 
-function buildPagesForSurah(surahId: number): PageContent[] {
+function buildPagesForSurah(surahId: number, allAyahs: Ayah[]): PageContent[] {
   const surah = surahs.find(s => s.id === surahId);
   if (!surah) return [];
-
-  const allAyahs = ayahsBySurah[surahId] || [];
   if (allAyahs.length === 0) return [];
 
   const AYAHS_PER_PAGE = 8;
@@ -72,27 +70,7 @@ function buildPagesForSurah(surahId: number): PageContent[] {
     });
   }
 
-  // If there's a next surah with content, add its beginning to continue the flow
-  const nextSurahId = surahId + 1;
-  if (nextSurahId <= 114) {
-    const nextSurah = surahs.find(s => s.id === nextSurahId);
-    const nextAyahs = ayahsBySurah[nextSurahId];
-    if (nextSurah && nextAyahs && nextAyahs.length > 0) {
-      // Add a transition page showing end of current + start of next
-      const lastPage = pages[pages.length - 1];
-      const lastSegmentAyahs = lastPage.segments.find(s => s.type === "ayahs")?.ayahs;
-      
-      // If the last page isn't full, append next surah header there
-      if (lastSegmentAyahs && lastSegmentAyahs.length < 6) {
-        lastPage.segments.push({ type: "surah-header", surahId: nextSurahId, surah: nextSurah });
-        if (nextSurahId !== 9) {
-          lastPage.segments.push({ type: "bismillah" });
-        }
-        const firstAyahs = nextAyahs.slice(0, 3);
-        lastPage.segments.push({ type: "ayahs", ayahs: firstAyahs, surahId: nextSurahId });
-      }
-    }
-  }
+  // Next surah transition is handled by navigation, not inline anymore
 
   return pages;
 }
@@ -103,6 +81,7 @@ export default function MushafReader() {
   const surahId = parseInt(id || "1");
   const surah = surahs.find(s => s.id === surahId);
 
+  const { ayahs, loading } = useAyahs(surahId);
   const [selectedAyah, setSelectedAyah] = useState<Ayah | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
@@ -111,7 +90,12 @@ export default function MushafReader() {
   const containerRef = useRef<HTMLDivElement>(null);
   const hideTimer = useRef<ReturnType<typeof setTimeout>>();
 
-  const pages = useMemo(() => buildPagesForSurah(surahId), [surahId]);
+  const pages = useMemo(() => buildPagesForSurah(surahId, ayahs), [surahId, ayahs]);
+
+  // Prefetch next surah
+  useEffect(() => {
+    prefetchSurah(surahId + 1);
+  }, [surahId]);
 
   useEffect(() => {
     setCurrentPageIndex(0);
@@ -193,13 +177,15 @@ export default function MushafReader() {
     );
   }
 
-  if (pages.length === 0) {
+  if (loading || pages.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
         <p className="font-arabic text-4xl text-accent">{surah.nameArabic}</p>
-        <p className="text-muted-foreground text-sm">
-          Le contenu de cette sourate sera disponible prochainement.
-        </p>
+        {loading ? (
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        ) : (
+          <p className="text-muted-foreground text-sm">Contenu indisponible.</p>
+        )}
       </div>
     );
   }
