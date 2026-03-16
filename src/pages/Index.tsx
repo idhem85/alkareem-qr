@@ -31,11 +31,9 @@ export default function Index() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-6 space-y-6 animate-fade-in">
-      {/* Greeting */}
+      {/* Logo */}
       <div className="text-center py-4">
-        <p className="font-arabic text-2xl text-accent mb-1">{getGreeting()}</p>
-        <h1 className="text-2xl font-bold font-sans">السلام عليكم</h1>
-        <p className="text-sm text-muted-foreground mt-1">تراتيل — Tarātīl</p>
+        <img src="/logo.svg" alt="تراتيل — Tarātīl" className="h-24 mx-auto" />
       </div>
 
       {/* Continue Reading */}
