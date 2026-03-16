@@ -137,7 +137,8 @@ export default function MushafReader() {
     const dx = e.changedTouches[0].clientX - touchStart.current.x;
     const dy = e.changedTouches[0].clientY - touchStart.current.y;
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
-      if (dx < 0) goToNextPage();
+      // RTL: swipe right (dx > 0) → next page, swipe left (dx < 0) → prev page
+      if (dx > 0) goToNextPage();
       else goToPrevPage();
     }
     touchStart.current = null;
