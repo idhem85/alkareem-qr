@@ -1,11 +1,54 @@
+import { useRef, useEffect } from "react";
 import { Play, Pause, SkipBack, SkipForward, X } from "lucide-react";
 import { useApp } from "@/contexts/AppContext";
 import { surahs } from "@/data/surahs";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { getAyahAudioUrl } from "@/lib/quranAudio";
 
 export function AudioPlayer() {
   const { audio, togglePlayback, setAudio } = useApp();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Create audio element once
+  useEffect(() => {
+    audioRef.current = new Audio();
+    audioRef.current.addEventListener("ended", () => {
+      // Auto-advance to next ayah
+      setAudio(prev => {
+        if (!prev.currentSurahId || !prev.currentAyah) return prev;
+        const surah = surahs.find(s => s.id === prev.currentSurahId);
+        if (surah && prev.currentAyah < surah.ayahCount) {
+          return { ...prev, currentAyah: prev.currentAyah + 1 };
+        }
+        return { ...prev, isPlaying: false };
+      });
+    });
+    return () => {
+      audioRef.current?.pause();
+      audioRef.current = null;
+    };
+  }, [setAudio]);
+
+  // Update source when surah/ayah changes
+  useEffect(() => {
+    if (!audioRef.current || !audio.currentSurahId || !audio.currentAyah) return;
+    const url = getAyahAudioUrl(audio.currentSurahId, audio.currentAyah);
+    audioRef.current.src = url;
+    if (audio.isPlaying) {
+      audioRef.current.play().catch(() => {});
+    }
+  }, [audio.currentSurahId, audio.currentAyah]);
+
+  // Play/pause
+  useEffect(() => {
+    if (!audioRef.current || !audio.currentSurahId) return;
+    if (audio.isPlaying) {
+      audioRef.current.play().catch(() => {});
+    } else {
+      audioRef.current.pause();
+    }
+  }, [audio.isPlaying, audio.currentSurahId]);
 
   if (!audio.currentSurahId) return null;
 
@@ -52,6 +95,7 @@ export function AudioPlayer() {
         </div>
 
         <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => {
+          audioRef.current?.pause();
           setAudio(prev => ({ ...prev, isPlaying: false, currentSurahId: null, currentAyah: null }));
         }}>
           <X className="h-4 w-4" />
