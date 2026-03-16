@@ -27,7 +27,7 @@ export default function Index() {
     <div className="max-w-2xl mx-auto px-4 py-6 space-y-6 animate-fade-in">
       {/* Logo */}
       <div className="text-center py-4">
-        <img src="/logo.svg" alt="تراتيل — Tarātīl" className="h-24 mx-auto" />
+        <img src="/logo.png" alt="تراتيل — Tarātīl" className="h-36 mx-auto" />
       </div>
 
       {/* Continue Reading */}

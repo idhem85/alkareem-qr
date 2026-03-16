@@ -33,7 +33,7 @@ export function DesktopSidebar() {
         )}
         {collapsed && (
           <div className="w-8 h-8 rounded-lg overflow-hidden">
-            <img src="/logo.svg" alt="تراتيل" className="w-full h-full object-contain" />
+            <img src="/logo.png" alt="تراتيل" className="w-full h-full object-contain" />
           </div>
         )}
       </div>
