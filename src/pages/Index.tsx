@@ -110,8 +110,6 @@ export default function Index() {
   const lang = settings.language || "fr";
   const t = labels[lang as keyof typeof labels] || labels.fr;
   const audioSurah = audio.currentSurahId ? surahs.find(s => s.id === audio.currentSurahId) : null;
-  const lang = settings.language || "fr";
-  const t = labels[lang as keyof typeof labels] || labels.fr;
 
   const lastSurah = readingProgress
     ? surahs.find(s => s.id === readingProgress.surahId)
