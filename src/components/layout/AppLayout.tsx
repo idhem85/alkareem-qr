@@ -13,7 +13,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       <main className={`flex-1 ${isMushaf ? "" : "pb-20 md:pb-0"}`}>
         {children}
       </main>
-      {!isMushaf && <AudioPlayer />}
+      <AudioPlayer hideUI={isMushaf} />
       {!isMushaf && <BottomNav />}
     </div>
   );
