@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getAyahAudioUrl } from "@/lib/quranAudio";
 
-export function AudioPlayer() {
+export function AudioPlayer({ hideUI = false }: { hideUI?: boolean }) {
   const { audio, togglePlayback, setAudio } = useApp();
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -48,6 +48,7 @@ export function AudioPlayer() {
   }, [audio.isPlaying, audio.currentSurahId]);
 
   if (!audio.currentSurahId) return null;
+  if (hideUI) return null;
 
   const surah = surahs.find(s => s.id === audio.currentSurahId);
 
