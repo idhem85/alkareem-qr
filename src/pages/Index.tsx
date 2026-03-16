@@ -1,8 +1,21 @@
 import { useApp } from "@/contexts/AppContext";
 import { surahs } from "@/data/surahs";
 import { Link } from "react-router-dom";
-import { BookOpen, ChevronRight, Sparkles } from "lucide-react";
+import { BookOpen, ChevronRight, Sparkles, CalendarDays } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { useMemo } from "react";
+
+function useHijriDate() {
+  return useMemo(() => {
+    const now = new Date();
+    const formatter = new Intl.DateTimeFormat("ar-SA-u-ca-islamic-umalqura", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+    return formatter.format(now);
+  }, []);
+}
 
 const versesOfTheDay = [
   {
