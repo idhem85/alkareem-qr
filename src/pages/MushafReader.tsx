@@ -81,6 +81,7 @@ export default function MushafReader() {
   const surahId = parseInt(id || "1");
   const surah = surahs.find(s => s.id === surahId);
 
+  const { ayahs, loading } = useAyahs(surahId);
   const [selectedAyah, setSelectedAyah] = useState<Ayah | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
@@ -89,7 +90,12 @@ export default function MushafReader() {
   const containerRef = useRef<HTMLDivElement>(null);
   const hideTimer = useRef<ReturnType<typeof setTimeout>>();
 
-  const pages = useMemo(() => buildPagesForSurah(surahId), [surahId]);
+  const pages = useMemo(() => buildPagesForSurah(surahId, ayahs), [surahId, ayahs]);
+
+  // Prefetch next surah
+  useEffect(() => {
+    prefetchSurah(surahId + 1);
+  }, [surahId]);
 
   useEffect(() => {
     setCurrentPageIndex(0);
