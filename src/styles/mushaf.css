@@ -234,9 +234,10 @@
 .mushaf-page-footer {
   margin-top: auto;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding-top: 0.75rem;
+  gap: 1rem;
+  padding-top: 0.35rem;
   border-top: 1px solid hsl(var(--gold) / 0.15);
 }
 
