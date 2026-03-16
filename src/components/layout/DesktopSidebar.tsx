@@ -26,9 +26,9 @@ export function DesktopSidebar() {
         {!collapsed && (
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg overflow-hidden">
-              <img src="/logo.png" alt="تراتيل" className="w-full h-full object-cover" />
-            </div>
-            <span className="font-arabic text-lg font-bold text-sidebar-foreground">تراتيل</span>
+            <img src="/logo.svg" alt="تراتيل" className="w-full h-full object-contain" />
+          </div>
+          <span className="font-arabic text-lg font-bold text-sidebar-foreground">تراتيل</span>
           </div>
         )}
         {collapsed && (
