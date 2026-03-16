@@ -69,7 +69,7 @@ export function MushafPage({ page, onAyahTap, selectedAyahId }: MushafPageProps)
                       </span>
                       <button
                         onClick={handlePlay}
-                        className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary/20 text-primary hover:bg-primary/30 transition-colors text-[10px] font-medium"
+                        className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-background text-primary border border-primary/30 hover:bg-primary/10 transition-colors text-[10px] font-medium shadow-sm"
                         aria-label={isPlayingThis ? "Pause" : "Écouter la sourate"}
                       >
                         {isPlayingThis ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
