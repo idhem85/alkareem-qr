@@ -1,24 +1,21 @@
-import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Home } from "lucide-react";
 
-const NotFound = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
-  }, [location.pathname]);
-
+export default function NotFound() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">404</h1>
-        <p className="mb-4 text-xl text-muted-foreground">Oops! Page not found</p>
-        <a href="/" className="text-primary underline hover:text-primary/90">
-          Return to Home
-        </a>
+    <div className="flex flex-col items-center justify-center min-h-[70vh] gap-6 px-4 text-center animate-fade-in">
+      <p className="font-arabic text-6xl text-accent">٤٠٤</p>
+      <div>
+        <p className="text-lg font-semibold mb-1">الصفحة غير موجودة</p>
+        <p className="text-sm text-muted-foreground">Page introuvable</p>
       </div>
+      <Link to="/">
+        <Button variant="outline" className="gap-2">
+          <Home className="h-4 w-4" />
+          العودة للرئيسية
+        </Button>
+      </Link>
     </div>
   );
-};
-
-export default NotFound;
+}
