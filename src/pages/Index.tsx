@@ -128,7 +128,7 @@ export default function Index() {
       )}
 
       {/* Verse of the Day — light style */}
-      <Link to={`/surah/${todayVerse.surahId}`}>
+      <Link to={`/surah/${todayVerse.surahId}`} className="block mt-4">
         <Card className="overflow-hidden border-border/50 hover-scale">
           <div className="px-5 py-5 text-center">
             <div className="flex items-center justify-center gap-2 mb-3">
