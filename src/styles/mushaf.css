@@ -2,8 +2,8 @@
 
 .mushaf-container {
   position: relative;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,20 +15,22 @@
 .mushaf-page-wrapper {
   width: 100%;
   max-width: 42rem;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   align-items: stretch;
   justify-content: center;
   padding: 0;
+  overflow: hidden;
 }
 
 .mushaf-page {
   width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   background: linear-gradient(
     180deg,
     hsl(38 40% 97%) 0%,
@@ -139,6 +141,9 @@
   line-height: 2.6;
   padding: 0.25rem 0;
   word-spacing: 0.06em;
+  overflow: hidden;
+  flex: 1;
+  min-height: 0;
 }
 
 .mushaf-ayah-inline {
@@ -252,6 +257,8 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
 }
 
 /* Navigation buttons */
@@ -290,7 +297,8 @@
   .mushaf-page {
     padding: 3.5rem 2rem 2rem;
     border-radius: 4px;
-    min-height: calc(100vh - 2rem);
+    height: calc(100vh - 2rem);
+    height: calc(100dvh - 2rem);
     margin: 1rem 0;
     box-shadow: 
       0 4px 24px hsl(var(--foreground) / 0.06),
