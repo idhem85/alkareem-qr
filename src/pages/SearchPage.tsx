@@ -118,19 +118,19 @@ export default function SearchPage() {
       <h1 className="text-xl font-bold mb-4">{t.title}</h1>
 
       {/* Tabs */}
-      <div className="flex gap-1 mb-4 overflow-x-auto pb-1 scrollbar-none">
+      <div className="flex gap-1 mb-4 overflow-x-auto pb-1 scrollbar-none -mx-4 px-4">
         {tabs.map(tab => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={cn(
-              "flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-all",
+              "flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-medium whitespace-nowrap transition-all shrink-0",
               activeTab === tab.id
                 ? "bg-primary text-primary-foreground"
                 : "bg-secondary text-muted-foreground hover:text-foreground"
             )}
           >
-            <tab.icon className="h-3.5 w-3.5" />
+            <tab.icon className="h-3 w-3" />
             {getTabLabel(tab, lang)}
           </button>
         ))}

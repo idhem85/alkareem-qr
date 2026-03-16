@@ -69,19 +69,22 @@ export function AyahDrawer({ ayah, open, onOpenChange }: AyahDrawerProps) {
           <p className="font-quran text-xl mt-3 leading-relaxed" dir="rtl">{ayah.textArabic}</p>
         </DrawerHeader>
 
-        <div className="flex items-center justify-center gap-2 py-3 border-b border-border">
-          <Button variant="outline" size="sm" onClick={handleCopy}>
-            <Copy className="h-3.5 w-3.5 mr-1.5" /> Copier
+        <div className="grid grid-cols-4 gap-2 px-4 py-3 border-b border-border">
+          <Button variant="outline" size="sm" className="flex flex-col items-center gap-1 h-auto py-2 px-1 text-[10px]" onClick={handleCopy}>
+            <Copy className="h-4 w-4" />
+            Copier
           </Button>
-          <Button variant="outline" size="sm" onClick={handleBookmark}>
-            {bookmarked ? <BookmarkCheck className="h-3.5 w-3.5 mr-1.5" /> : <Bookmark className="h-3.5 w-3.5 mr-1.5" />}
+          <Button variant="outline" size="sm" className="flex flex-col items-center gap-1 h-auto py-2 px-1 text-[10px]" onClick={handleBookmark}>
+            {bookmarked ? <BookmarkCheck className="h-4 w-4" /> : <Bookmark className="h-4 w-4" />}
             {bookmarked ? "Retiré" : "Signet"}
           </Button>
-          <Button variant="outline" size="sm" onClick={handlePlay}>
-            <Play className="h-3.5 w-3.5 mr-1.5" /> Écouter
+          <Button variant="outline" size="sm" className="flex flex-col items-center gap-1 h-auto py-2 px-1 text-[10px]" onClick={handlePlay}>
+            <Play className="h-4 w-4" />
+            Écouter
           </Button>
-          <Button variant="outline" size="sm">
-            <Share2 className="h-3.5 w-3.5 mr-1.5" /> Partager
+          <Button variant="outline" size="sm" className="flex flex-col items-center gap-1 h-auto py-2 px-1 text-[10px]">
+            <Share2 className="h-4 w-4" />
+            Partager
           </Button>
         </div>
 
