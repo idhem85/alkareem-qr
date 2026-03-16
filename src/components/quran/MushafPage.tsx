@@ -34,8 +34,12 @@ export function MushafPage({ page, onAyahTap, selectedAyahId }: MushafPageProps)
     <div className="mushaf-page" dir="rtl">
       {/* Page header */}
       <div className="mushaf-page-header">
-        <span className="font-arabic text-xs text-muted-foreground">{page.surahNameArabic}</span>
-        <span className="text-xs text-muted-foreground">الجزء {toArabicNumber(page.juzNumber)}</span>
+        <span className="font-arabic text-xs text-muted-foreground leading-none">
+          {page.surahNameArabic}
+        </span>
+        <span className="font-arabic text-xs text-muted-foreground leading-none">
+          الجزء {toArabicNumber(page.juzNumber)}
+        </span>
       </div>
 
       {/* Page content */}
@@ -46,7 +50,9 @@ export function MushafPage({ page, onAyahTap, selectedAyahId }: MushafPageProps)
               <div key={`header-${segIdx}`} className="mushaf-surah-header-block">
                 <div className="mushaf-surah-title-frame">
                   <div className="mushaf-surah-title-inner">
-                    <span className="font-arabic text-lg">سُورَةُ {segment.surah.nameArabic}</span>
+                    <span className="font-arabic text-lg leading-relaxed">
+                      سُورَةُ {segment.surah.nameArabic}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -104,8 +110,12 @@ export function MushafPage({ page, onAyahTap, selectedAyahId }: MushafPageProps)
 
       {/* Page footer */}
       <div className="mushaf-page-footer">
-        <span className="mushaf-page-number">{toArabicNumber(page.pageNumber)}</span>
-        <span className="text-[10px] text-muted-foreground">{page.hizbInfo}</span>
+        <span className="mushaf-page-number font-arabic">
+          {toArabicNumber(page.pageNumber)}
+        </span>
+        <span className="font-arabic text-[10px] text-muted-foreground">
+          {page.hizbInfo}
+        </span>
       </div>
     </div>
   );
