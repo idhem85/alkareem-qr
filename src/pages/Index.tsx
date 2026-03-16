@@ -73,6 +73,8 @@ const labels = {
     selectedSurahs: "Sourates recommandées",
     viewAll: "Voir tout",
     versets: "versets",
+    nowPlaying: "En cours d'écoute",
+    ayahLabel: "Verset",
   },
   ar: {
     continueReading: "متابعة القراءة",
@@ -81,6 +83,8 @@ const labels = {
     selectedSurahs: "سور مختارة",
     viewAll: "عرض الكل",
     versets: "آيات",
+    nowPlaying: "قيد الاستماع",
+    ayahLabel: "الآية",
   },
   en: {
     continueReading: "Continue reading",
@@ -89,6 +93,8 @@ const labels = {
     selectedSurahs: "Recommended Surahs",
     viewAll: "View all",
     versets: "verses",
+    nowPlaying: "Now playing",
+    ayahLabel: "Ayah",
   },
 };
 
