@@ -1,6 +1,7 @@
 import { bismillah, toArabicNumber } from "@/data/ayahs";
 import { useApp } from "@/contexts/AppContext";
 import { cn } from "@/lib/utils";
+import { Play, Pause } from "lucide-react";
 import type { Ayah } from "@/data/ayahs";
 import type { Surah } from "@/data/surahs";
 
@@ -28,7 +29,7 @@ interface MushafPageProps {
 }
 
 export function MushafPage({ page, onAyahTap, selectedAyahId }: MushafPageProps) {
-  const { settings } = useApp();
+  const { settings, audio, setAudio, togglePlayback } = useApp();
 
   return (
     <div className="mushaf-page" dir="rtl">
@@ -46,6 +47,15 @@ export function MushafPage({ page, onAyahTap, selectedAyahId }: MushafPageProps)
       <div className="mushaf-page-content">
         {page.segments.map((segment, segIdx) => {
           if (segment.type === "surah-header" && segment.surah) {
+            const isPlayingThis = audio.currentSurahId === segment.surah.id && audio.isPlaying;
+            const handlePlay = (e: React.MouseEvent) => {
+              e.stopPropagation();
+              if (audio.currentSurahId === segment.surah!.id) {
+                togglePlayback();
+              } else {
+                setAudio({ isPlaying: true, currentSurahId: segment.surah!.id, currentAyah: 1, reciter: audio.reciter });
+              }
+            };
             return (
               <div key={`header-${segIdx}`} className="mushaf-surah-header-block">
                 <div className="mushaf-surah-title-frame">
@@ -53,7 +63,17 @@ export function MushafPage({ page, onAyahTap, selectedAyahId }: MushafPageProps)
                     <span className="font-arabic text-lg leading-relaxed">
                       سُورَةُ {segment.surah.nameArabic}
                     </span>
+                    <span className="text-[10px] opacity-70 mt-0.5 block">
+                      {segment.surah.ayahCount} versets
+                    </span>
                   </div>
+                  <button
+                    onClick={handlePlay}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 flex items-center justify-center w-7 h-7 rounded-full bg-primary/15 text-primary hover:bg-primary/25 transition-colors"
+                    aria-label={isPlayingThis ? "Pause" : "Écouter la sourate"}
+                  >
+                    {isPlayingThis ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5 ml-0.5" />}
+                  </button>
                 </div>
               </div>
             );
