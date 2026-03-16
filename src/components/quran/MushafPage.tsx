@@ -1,7 +1,7 @@
 import { bismillah, toArabicNumber } from "@/data/ayahs";
 import { useApp } from "@/contexts/AppContext";
 import { cn } from "@/lib/utils";
-import { Play, Pause, SkipBack, SkipForward } from "lucide-react";
+import { Play, Pause } from "lucide-react";
 import type { Ayah } from "@/data/ayahs";
 import type { Surah } from "@/data/surahs";
 
@@ -63,16 +63,22 @@ export function MushafPage({ page, onAyahTap, selectedAyahId }: MushafPageProps)
                     <span className="font-arabic text-lg leading-relaxed">
                       سُورَةُ {segment.surah.nameArabic}
                     </span>
-                    <div className="flex items-center gap-3 mt-0.5">
+                    <div className="flex items-center gap-2.5 mt-1">
                       <span className="text-[10px] opacity-70">
                         {segment.surah.ayahCount} versets
                       </span>
+                      <span className="text-[10px] opacity-40">•</span>
                       <button
                         onClick={handlePlay}
-                        className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-background text-primary border border-primary/30 hover:bg-primary/10 transition-colors text-[10px] font-medium shadow-sm"
+                        className={cn(
+                          "flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold shadow-sm transition-all",
+                          isPlayingThis
+                            ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                            : "bg-background text-primary border border-primary/30 hover:bg-primary hover:text-primary-foreground"
+                        )}
                         aria-label={isPlayingThis ? "Pause" : "Écouter la sourate"}
                       >
-                        {isPlayingThis ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
+                        {isPlayingThis ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
                         {isPlayingThis ? "Pause" : "Écouter"}
                       </button>
                     </div>
@@ -136,22 +142,6 @@ export function MushafPage({ page, onAyahTap, selectedAyahId }: MushafPageProps)
         <span className="mushaf-page-number font-arabic">
           {toArabicNumber(page.pageNumber)}
         </span>
-        {/* Mini audio controls */}
-        {audio.currentSurahId ? (
-          <div className="flex items-center gap-0.5" onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => setAudio(prev => ({ ...prev, currentSurahId: Math.max(1, (prev.currentSurahId || 1) - 1), currentAyah: 1 }))} className="h-6 w-6 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors">
-              <SkipBack className="h-3 w-3" />
-            </button>
-            <button onClick={togglePlayback} className="h-7 w-7 flex items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
-              {audio.isPlaying ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3 ml-px" />}
-            </button>
-            <button onClick={() => setAudio(prev => ({ ...prev, currentSurahId: Math.min(114, (prev.currentSurahId || 1) + 1), currentAyah: 1 }))} className="h-6 w-6 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors">
-              <SkipForward className="h-3 w-3" />
-            </button>
-          </div>
-        ) : (
-          <span />
-        )}
         <span className="font-arabic text-[10px] text-muted-foreground">
           {page.hizbInfo}
         </span>
