@@ -23,19 +23,9 @@ export function DesktopSidebar() {
       )}
     >
       <div className={cn("flex items-center gap-3 px-4 py-5 border-b border-sidebar-border", collapsed && "justify-center px-2")}>
-        {!collapsed && (
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg overflow-hidden">
-            <img src="/logo.png" alt="تراتيل" className="w-full h-full object-contain" />
-          </div>
-          <span className="text-lg font-bold text-sidebar-foreground">Al Kareem QR</span>
-          </div>
-        )}
-        {collapsed && (
-          <div className="w-8 h-8 rounded-lg overflow-hidden">
-            <img src="/logo.png" alt="تراتيل" className="w-full h-full object-contain" />
-          </div>
-        )}
+        <span className={cn("text-lg font-bold text-sidebar-foreground", collapsed && "text-sm")}>
+          {collapsed ? "AK" : "Al Kareem QR"}
+        </span>
       </div>
 
       <nav className="flex-1 py-4 px-2 space-y-1">
