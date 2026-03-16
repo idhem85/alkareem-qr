@@ -107,6 +107,10 @@ export default function MushafReader() {
   const goToPage = useCallback((index: number) => {
     if (index >= 0 && index < pages.length) {
       setCurrentPageIndex(index);
+      // Scroll ayah blocks back to top
+      containerRef.current?.querySelectorAll('.mushaf-ayah-block').forEach(el => {
+        el.scrollTop = 0;
+      });
       const page = pages[index];
       const firstAyahSegment = page.segments.find(s => s.type === "ayahs");
       if (firstAyahSegment?.ayahs?.[0]) {
