@@ -1,7 +1,7 @@
 import { bismillah, toArabicNumber } from "@/data/ayahs";
 import { useApp } from "@/contexts/AppContext";
 import { cn } from "@/lib/utils";
-import { Play, Pause, SkipBack, SkipForward } from "lucide-react";
+import { Play, Pause } from "lucide-react";
 import type { Ayah } from "@/data/ayahs";
 import type { Surah } from "@/data/surahs";
 
