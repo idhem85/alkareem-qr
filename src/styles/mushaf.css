@@ -35,7 +35,7 @@
     hsl(38 35% 95%) 50%,
     hsl(38 40% 97%) 100%
   );
-  padding: 3.5rem 1rem 2rem;
+  padding: 3.5rem 1rem 3.5rem;
   position: relative;
   border-left: 1px solid hsl(var(--gold) / 0.12);
   border-right: 1px solid hsl(var(--gold) / 0.12);
@@ -301,12 +301,19 @@
 /* Page indicator dots */
 .mushaf-page-indicator {
   position: fixed;
-  bottom: 5rem;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 0.35rem;
   z-index: 30;
+  padding: 0.75rem 1rem;
+  background: hsl(var(--background) / 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid hsl(var(--gold) / 0.12);
 }
 
 .mushaf-dot {
@@ -328,7 +335,14 @@
 
 @media (min-width: 768px) {
   .mushaf-page-indicator {
-    bottom: 1.5rem;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    bottom: 1rem;
+    border-radius: 2rem;
+    padding: 0.5rem 1.5rem;
+    width: auto;
+    border: 1px solid hsl(var(--gold) / 0.12);
   }
 }
 
