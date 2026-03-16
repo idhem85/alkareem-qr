@@ -335,7 +335,14 @@
 
 @media (min-width: 768px) {
   .mushaf-page-indicator {
-    bottom: 1.5rem;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    bottom: 1rem;
+    border-radius: 2rem;
+    padding: 0.5rem 1.5rem;
+    width: auto;
+    border: 1px solid hsl(var(--gold) / 0.12);
   }
 }
 
