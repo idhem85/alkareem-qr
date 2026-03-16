@@ -1,38 +1,47 @@
 import { useApp } from "@/contexts/AppContext";
 import { surahs } from "@/data/surahs";
 import { Link } from "react-router-dom";
-import { BookOpen, ChevronLeft, Star } from "lucide-react";
+import { BookOpen, ChevronRight, Sparkles } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 
 const versesOfTheDay = [
   {
     text: "لَا يُكَلِّفُ ٱللَّهُ نَفْسًا إِلَّا وُسْعَهَا",
-    translation: "Allah n'impose à aucune âme une charge supérieure à sa capacité.",
+    translationFr: "Allah n'impose à aucune âme une charge supérieure à sa capacité.",
+    translationEn: "Allah does not burden a soul beyond that it can bear.",
+    translationAr: "لا يكلّف الله نفساً إلا وسعها",
     reference: "البقرة ٢:٢٨٦",
     surahId: 2,
   },
   {
     text: "فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا",
-    translation: "Car en vérité, avec la difficulté vient la facilité.",
+    translationFr: "Car en vérité, avec la difficulté vient la facilité.",
+    translationEn: "For indeed, with hardship comes ease.",
+    translationAr: "فإنّ مع العسر يسراً",
     reference: "الشرح ٩٤:٥",
     surahId: 94,
   },
   {
     text: "وَمَن يَتَوَكَّلْ عَلَى ٱللَّهِ فَهُوَ حَسْبُهُ",
-    translation: "Et quiconque place sa confiance en Allah, Il lui suffit.",
+    translationFr: "Et quiconque place sa confiance en Allah, Il lui suffit.",
+    translationEn: "And whoever relies upon Allah – then He is sufficient for him.",
+    translationAr: "ومن يتوكّل على الله فهو حسبه",
     reference: "الطلاق ٦٥:٣",
     surahId: 65,
   },
   {
     text: "إِنَّ ٱللَّهَ مَعَ ٱلصَّـٰبِرِينَ",
-    translation: "En vérité, Allah est avec les patients.",
+    translationFr: "En vérité, Allah est avec les patients.",
+    translationEn: "Indeed, Allah is with the patient.",
+    translationAr: "إنّ الله مع الصابرين",
     reference: "البقرة ٢:١٥٣",
     surahId: 2,
   },
   {
     text: "وَلَذِكْرُ ٱللَّهِ أَكْبَرُ",
-    translation: "Et le rappel d'Allah est certes ce qu'il y a de plus grand.",
+    translationFr: "Et le rappel d'Allah est certes ce qu'il y a de plus grand.",
+    translationEn: "And the remembrance of Allah is greater.",
+    translationAr: "ولذكر الله أكبر",
     reference: "العنكبوت ٢٩:٤٥",
     surahId: 29,
   },
@@ -40,16 +49,45 @@ const versesOfTheDay = [
 
 const todayVerse = versesOfTheDay[new Date().getDay() % versesOfTheDay.length];
 
-const popularSurahs = [
-  { id: 1, reason: "الفاتحة" },
-  { id: 36, reason: "قلب القرآن" },
-  { id: 55, reason: "الرحمن" },
-  { id: 67, reason: "الملك" },
-  { id: 112, reason: "الإخلاص" },
-];
+const popularSurahs = [1, 36, 55, 67, 112];
+
+const labels = {
+  fr: {
+    continueReading: "Poursuivre la lecture",
+    ayah: "Ayah",
+    verseOfDay: "Verset du jour",
+    selectedSurahs: "Sourates recommandées",
+    viewAll: "Voir tout",
+    versets: "versets",
+  },
+  ar: {
+    continueReading: "متابعة القراءة",
+    ayah: "الآية",
+    verseOfDay: "آية اليوم",
+    selectedSurahs: "سور مختارة",
+    viewAll: "عرض الكل",
+    versets: "آيات",
+  },
+  en: {
+    continueReading: "Continue reading",
+    ayah: "Ayah",
+    verseOfDay: "Verse of the day",
+    selectedSurahs: "Recommended Surahs",
+    viewAll: "View all",
+    versets: "verses",
+  },
+};
+
+function getVerseTranslation(verse: typeof versesOfTheDay[0], lang: string) {
+  if (lang === "ar") return verse.translationAr;
+  if (lang === "en") return verse.translationEn;
+  return verse.translationFr;
+}
 
 export default function Index() {
-  const { readingProgress } = useApp();
+  const { readingProgress, settings } = useApp();
+  const lang = settings.language || "fr";
+  const t = labels[lang as keyof typeof labels] || labels.fr;
 
   const lastSurah = readingProgress
     ? surahs.find(s => s.id === readingProgress.surahId)
@@ -65,60 +103,72 @@ export default function Index() {
       {/* Continue Reading */}
       {lastSurah && readingProgress && (
         <Link to={`/surah/${lastSurah.id}`}>
-          <Card className="p-4 hover-scale border-accent/20 bg-card">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <BookOpen className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">متابعة القراءة</p>
-                  <p className="font-semibold text-sm">{lastSurah.nameTransliteration}</p>
-                  <p className="text-xs text-muted-foreground font-arabic">
-                    الآية {readingProgress.ayahNumber}
-                  </p>
-                </div>
+          <Card className="p-4 hover-scale border-border/50 bg-card">
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                <BookOpen className="h-5 w-5 text-primary" />
               </div>
-              <ChevronLeft className="h-5 w-5 text-muted-foreground" />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs text-muted-foreground mb-0.5">{t.continueReading}</p>
+                <p className="font-semibold text-sm truncate">
+                  {lastSurah.nameTransliteration}
+                  <span className="font-arabic text-muted-foreground mx-1.5">—</span>
+                  <span className="font-arabic text-accent">{lastSurah.nameArabic}</span>
+                </p>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="text-xs text-muted-foreground font-arabic">
+                  {t.ayah} {readingProgress.ayahNumber}
+                </span>
+                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+              </div>
             </div>
           </Card>
         </Link>
       )}
 
-      {/* Verse of the Day */}
+      {/* Verse of the Day — light style */}
       <Link to={`/surah/${todayVerse.surahId}`}>
-        <Card className="overflow-hidden border-0 hover-scale">
-          <div className="gold-gradient p-6 text-center">
-            <Star className="h-5 w-5 mx-auto mb-3 text-primary-foreground/80" />
-            <p className="font-quran text-2xl leading-[2.2] mb-3 text-primary-foreground" dir="rtl">
+        <Card className="overflow-hidden border-border/50 hover-scale">
+          <div className="px-5 py-5 text-center">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <Sparkles className="h-3.5 w-3.5 text-accent" />
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-accent">
+                {t.verseOfDay}
+              </span>
+              <Sparkles className="h-3.5 w-3.5 text-accent" />
+            </div>
+            <p className="font-quran text-2xl leading-[2.4] mb-3 text-foreground" dir="rtl">
               {todayVerse.text}
             </p>
-            <p className="text-sm text-primary-foreground/90 mb-2">{todayVerse.translation}</p>
-            <p className="font-arabic text-xs text-primary-foreground/70">{todayVerse.reference}</p>
+            <p className="text-sm text-muted-foreground mb-2 leading-relaxed">
+              {getVerseTranslation(todayVerse, lang)}
+            </p>
+            <p className="font-arabic text-xs text-accent/70">{todayVerse.reference}</p>
           </div>
         </Card>
       </Link>
 
-      {/* Popular Surahs */}
+      {/* Popular Surahs — matching SearchPage surah layout */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold">سور مختارة</h2>
-          <Link to="/surahs" className="text-xs text-accent hover:underline">عرض الكل</Link>
+          <h2 className="text-sm font-semibold">{t.selectedSurahs}</h2>
+          <Link to="/surahs" className="text-xs text-accent hover:underline">{t.viewAll}</Link>
         </div>
         <div className="space-y-2">
-          {popularSurahs.map(({ id }) => {
+          {popularSurahs.map(id => {
             const s = surahs.find(su => su.id === id)!;
             return (
               <Link key={s.id} to={`/surah/${s.id}`}>
-                <Card className={cn("p-3 hover-scale flex items-center justify-between border-border/50")}>
-                  <div className="flex items-center gap-3" dir="rtl">
+                <Card className="p-3 hover-scale flex items-center justify-between">
+                  <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center shrink-0">
-                      <span className="font-arabic text-sm text-foreground">{s.id}</span>
+                      <span className="text-sm font-semibold text-foreground">{s.id}</span>
                     </div>
                     <div className="min-w-0">
                       <p className="font-semibold text-sm">{s.nameTransliteration}</p>
                       <p className="text-xs text-muted-foreground truncate">
-                        {s.nameTranslation} • {s.ayahCount} versets
+                        {s.nameTranslation} • {s.ayahCount} {t.versets}
                       </p>
                     </div>
                   </div>
