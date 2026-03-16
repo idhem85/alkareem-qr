@@ -1,13 +1,13 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { surahs } from "@/data/surahs";
-import { ayahsBySurah } from "@/data/ayahs";
 import { AyahDrawer } from "@/components/quran/AyahDrawer";
 import { ReadingToolbar } from "@/components/quran/ReadingToolbar";
 import { MushafPage } from "@/components/quran/MushafPage";
 import { useApp } from "@/contexts/AppContext";
 import type { Ayah } from "@/data/ayahs";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useAyahs, prefetchSurah } from "@/hooks/useAyahs";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 
 interface PageContent {
   pageNumber: number;
