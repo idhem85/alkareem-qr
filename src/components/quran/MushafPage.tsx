@@ -1,0 +1,112 @@
+import { bismillah, toArabicNumber } from "@/data/ayahs";
+import { useApp } from "@/contexts/AppContext";
+import { cn } from "@/lib/utils";
+import type { Ayah } from "@/data/ayahs";
+import type { Surah } from "@/data/surahs";
+
+interface PageSegment {
+  type: "surah-header" | "bismillah" | "ayahs";
+  surahId?: number;
+  surah?: Surah;
+  ayahs?: Ayah[];
+}
+
+interface PageContent {
+  pageNumber: number;
+  surahId: number;
+  surahName: string;
+  surahNameArabic: string;
+  juzNumber: number;
+  hizbInfo: string;
+  segments: PageSegment[];
+}
+
+interface MushafPageProps {
+  page: PageContent;
+  onAyahTap: (ayah: Ayah) => void;
+  selectedAyahId?: number;
+}
+
+export function MushafPage({ page, onAyahTap, selectedAyahId }: MushafPageProps) {
+  const { settings } = useApp();
+
+  return (
+    <div className="mushaf-page" dir="rtl">
+      {/* Page header */}
+      <div className="mushaf-page-header">
+        <span className="font-arabic text-xs text-muted-foreground">{page.surahNameArabic}</span>
+        <span className="text-xs text-muted-foreground">الجزء {toArabicNumber(page.juzNumber)}</span>
+      </div>
+
+      {/* Page content */}
+      <div className="mushaf-page-content">
+        {page.segments.map((segment, segIdx) => {
+          if (segment.type === "surah-header" && segment.surah) {
+            return (
+              <div key={`header-${segIdx}`} className="mushaf-surah-header-block">
+                <div className="mushaf-surah-title-frame">
+                  <div className="mushaf-surah-title-inner">
+                    <span className="font-arabic text-lg">سُورَةُ {segment.surah.nameArabic}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          }
+
+          if (segment.type === "bismillah") {
+            return (
+              <div key={`bismillah-${segIdx}`} className="mushaf-bismillah">
+                {bismillah}
+              </div>
+            );
+          }
+
+          if (segment.type === "ayahs" && segment.ayahs) {
+            return (
+              <div key={`ayahs-${segIdx}`} className="mushaf-ayah-block">
+                {segment.ayahs.map((ayah) => (
+                  <span
+                    key={ayah.id}
+                    onClick={(e) => { e.stopPropagation(); onAyahTap(ayah); }}
+                    className={cn(
+                      "mushaf-ayah-inline cursor-pointer transition-colors duration-200",
+                      selectedAyahId === ayah.id && "mushaf-ayah-highlight"
+                    )}
+                  >
+                    <span
+                      className="font-quran"
+                      style={{ fontSize: `${settings.fontSize}px` }}
+                    >
+                      {ayah.textArabic}
+                    </span>
+                    <span className="mushaf-ayah-number">
+                      {toArabicNumber(ayah.numberInSurah)}
+                    </span>
+                  </span>
+                ))}
+                {settings.showTranslation && segment.ayahs.length > 0 && (
+                  <div className="mushaf-translation-block" dir="ltr">
+                    {segment.ayahs.map((ayah) => (
+                      <p key={`tr-${ayah.id}`} className="mushaf-translation-line">
+                        <span className="mushaf-translation-num">{ayah.numberInSurah}.</span>
+                        {ayah.translationFr}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          }
+
+          return null;
+        })}
+      </div>
+
+      {/* Page footer */}
+      <div className="mushaf-page-footer">
+        <span className="mushaf-page-number">{toArabicNumber(page.pageNumber)}</span>
+        <span className="text-[10px] text-muted-foreground">{page.hizbInfo}</span>
+      </div>
+    </div>
+  );
+}
