@@ -99,6 +99,7 @@ function getVerseTranslation(verse: typeof versesOfTheDay[0], lang: string) {
 
 export default function Index() {
   const { readingProgress, settings } = useApp();
+  const hijriDate = useHijriDate();
   const lang = settings.language || "fr";
   const t = labels[lang as keyof typeof labels] || labels.fr;
 
