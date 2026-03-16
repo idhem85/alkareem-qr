@@ -141,6 +141,9 @@
   line-height: 2.6;
   padding: 0.25rem 0;
   word-spacing: 0.06em;
+  overflow: hidden;
+  flex: 1;
+  min-height: 0;
 }
 
 .mushaf-ayah-inline {
