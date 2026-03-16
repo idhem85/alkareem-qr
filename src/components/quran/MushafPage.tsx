@@ -29,7 +29,7 @@ interface MushafPageProps {
 }
 
 export function MushafPage({ page, onAyahTap, selectedAyahId }: MushafPageProps) {
-  const { settings } = useApp();
+  const { settings, audio, setAudio, togglePlayback } = useApp();
 
   return (
     <div className="mushaf-page" dir="rtl">
