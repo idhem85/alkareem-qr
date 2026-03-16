@@ -8,7 +8,7 @@ import { useMemo } from "react";
 function useHijriDate() {
   return useMemo(() => {
     const now = new Date();
-    const formatter = new Intl.DateTimeFormat("ar-SA-u-ca-islamic-umalqura", {
+    const formatter = new Intl.DateTimeFormat("ar-SA-u-ca-islamic-umalqura-nu-latn", {
       day: "numeric",
       month: "long",
       year: "numeric",
