@@ -311,7 +311,7 @@ export default function SearchPage() {
             </Link>
           )}
           {/* Page grid */}
-          <div className="grid grid-cols-5 gap-2 mt-4">
+          <div className="grid grid-cols-4 sm:grid-cols-5 gap-1.5 mt-4">
             {Array.from({ length: 30 }, (_, i) => {
               const p = i * 20 + 1;
               return (
