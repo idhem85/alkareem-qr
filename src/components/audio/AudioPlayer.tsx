@@ -47,7 +47,8 @@ export function AudioPlayer({ hideUI = false }: { hideUI?: boolean }) {
     }
   }, [audio.isPlaying, audio.currentSurahId]);
 
-  if (!audio.currentSurahId || hideUI) return null;
+  if (!audio.currentSurahId) return null;
+  if (hideUI) return null;
 
   const surah = surahs.find(s => s.id === audio.currentSurahId);
 
