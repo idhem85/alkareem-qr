@@ -88,6 +88,7 @@
 }
 
 .mushaf-surah-title-frame {
+  position: relative;
   background: linear-gradient(
     90deg,
     hsl(var(--gold) / 0.06),
