@@ -1,8 +1,21 @@
 import { useApp } from "@/contexts/AppContext";
 import { surahs } from "@/data/surahs";
 import { Link } from "react-router-dom";
-import { BookOpen, ChevronRight, Sparkles } from "lucide-react";
+import { BookOpen, ChevronRight, Sparkles, CalendarDays } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { useMemo } from "react";
+
+function useHijriDate() {
+  return useMemo(() => {
+    const now = new Date();
+    const formatter = new Intl.DateTimeFormat("ar-SA-u-ca-islamic-umalqura", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+    return formatter.format(now);
+  }, []);
+}
 
 const versesOfTheDay = [
   {
@@ -86,6 +99,7 @@ function getVerseTranslation(verse: typeof versesOfTheDay[0], lang: string) {
 
 export default function Index() {
   const { readingProgress, settings } = useApp();
+  const hijriDate = useHijriDate();
   const lang = settings.language || "fr";
   const t = labels[lang as keyof typeof labels] || labels.fr;
 
@@ -95,9 +109,13 @@ export default function Index() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-6 space-y-6 animate-fade-in">
-      {/* Logo */}
-      <div className="text-center py-4">
-        <img src="/logo.png" alt="تراتيل — Tarātīl" className="h-36 mx-auto" />
+      {/* Header */}
+      <div className="flex items-center justify-between py-3">
+        <img src="/logo.png" alt="تراتيل — Tarātīl" className="h-14" />
+        <div className="flex items-center gap-2 bg-card border border-border/60 rounded-xl px-3 py-2">
+          <CalendarDays className="h-4 w-4 text-accent shrink-0" />
+          <span className="font-arabic text-sm text-foreground" dir="rtl">{hijriDate}</span>
+        </div>
       </div>
 
       {/* Continue Reading */}
