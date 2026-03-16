@@ -32,8 +32,8 @@ export function DesktopSidebar() {
           </div>
         )}
         {collapsed && (
-          <div className="w-8 h-8 rounded-lg gold-gradient flex items-center justify-center">
-            <BookOpen className="h-4 w-4 text-sidebar-primary-foreground" />
+          <div className="w-8 h-8 rounded-lg overflow-hidden">
+            <img src="/logo.png" alt="تراتيل" className="w-full h-full object-cover" />
           </div>
         )}
       </div>
