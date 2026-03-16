@@ -70,27 +70,7 @@ function buildPagesForSurah(surahId: number, allAyahs: Ayah[]): PageContent[] {
     });
   }
 
-  // If there's a next surah with content, add its beginning to continue the flow
-  const nextSurahId = surahId + 1;
-  if (nextSurahId <= 114) {
-    const nextSurah = surahs.find(s => s.id === nextSurahId);
-    const nextAyahs = ayahsBySurah[nextSurahId];
-    if (nextSurah && nextAyahs && nextAyahs.length > 0) {
-      // Add a transition page showing end of current + start of next
-      const lastPage = pages[pages.length - 1];
-      const lastSegmentAyahs = lastPage.segments.find(s => s.type === "ayahs")?.ayahs;
-      
-      // If the last page isn't full, append next surah header there
-      if (lastSegmentAyahs && lastSegmentAyahs.length < 6) {
-        lastPage.segments.push({ type: "surah-header", surahId: nextSurahId, surah: nextSurah });
-        if (nextSurahId !== 9) {
-          lastPage.segments.push({ type: "bismillah" });
-        }
-        const firstAyahs = nextAyahs.slice(0, 3);
-        lastPage.segments.push({ type: "ayahs", ayahs: firstAyahs, surahId: nextSurahId });
-      }
-    }
-  }
+  // Next surah transition is handled by navigation, not inline anymore
 
   return pages;
 }
