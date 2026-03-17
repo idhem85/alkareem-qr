@@ -253,7 +253,7 @@ export default function SearchPage() {
               />
             </div>
             {verseSurahId > 0 && verseNum > 0 && verseSurah && verseNum <= verseSurah.ayahCount && (
-              <Link to={`/surah/${verseSurahId}`} className="block mt-2">
+              <Link to={`/surah/${verseSurahId}?ayah=${verseNum}`} className="block mt-2">
                 <div className="p-2 rounded-lg bg-primary/10 border border-primary/20 text-center">
                   <p className="text-xs font-semibold text-primary">{verseSurah.nameTransliteration} {verseSurahId}:{verseNum}</p>
                 </div>
