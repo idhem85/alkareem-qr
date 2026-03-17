@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { surahs } from "@/data/surahs";
 import { AyahDrawer } from "@/components/quran/AyahDrawer";
@@ -73,14 +73,17 @@ function buildPagesForSurah(surahId: number, allAyahs: Ayah[]): PageContent[] {
 export default function MushafReader() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const surahId = parseInt(id || "1");
   const surah = surahs.find(s => s.id === surahId);
+  const targetAyah = searchParams.get("ayah");
 
   const { ayahs, loading } = useAyahs(surahId);
   const [selectedAyah, setSelectedAyah] = useState<Ayah | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [toolbarVisible, setToolbarVisible] = useState(true);
+  const [highlightAyahId, setHighlightAyahId] = useState<string | null>(null);
   const { updateReadingProgress } = useApp();
   const containerRef = useRef<HTMLDivElement>(null);
   const hideTimer = useRef<ReturnType<typeof setTimeout>>();
@@ -89,8 +92,27 @@ export default function MushafReader() {
 
   useEffect(() => { prefetchSurah(surahId + 1); }, [surahId]);
 
+  // Navigate to the page containing the target ayah
   useEffect(() => {
-    setCurrentPageIndex(0);
+    if (targetAyah && pages.length > 0) {
+      const ayahNum = parseInt(targetAyah);
+      const pageIdx = pages.findIndex(p =>
+        p.segments.some(s => s.type === "ayahs" && s.ayahs?.some(a => a.numberInSurah === ayahNum))
+      );
+      if (pageIdx >= 0) {
+        setCurrentPageIndex(pageIdx);
+        setHighlightAyahId(`${surahId}:${ayahNum}`);
+        // Clear highlight after 4 seconds
+        const timer = setTimeout(() => setHighlightAyahId(null), 4000);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [targetAyah, pages, surahId]);
+
+  useEffect(() => {
+    if (!targetAyah) {
+      setCurrentPageIndex(0);
+    }
     if (surah) updateReadingProgress(surahId, 1);
   }, [surahId]);
 
@@ -204,6 +226,7 @@ export default function MushafReader() {
             updateReadingProgress(ayah.surahId, ayah.numberInSurah);
           }}
           selectedAyahId={selectedAyah?.id}
+          highlightAyahId={highlightAyahId}
         />
       </div>
 

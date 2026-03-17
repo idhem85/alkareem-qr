@@ -1,7 +1,7 @@
 import { bismillah, toArabicNumber } from "@/data/ayahs";
 import { useApp } from "@/contexts/AppContext";
 import { cn } from "@/lib/utils";
-import { Play, Pause } from "lucide-react";
+import { Play, Pause, Bookmark } from "lucide-react";
 import type { Ayah } from "@/data/ayahs";
 import type { Surah } from "@/data/surahs";
 
@@ -26,10 +26,11 @@ interface MushafPageProps {
   page: PageContent;
   onAyahTap: (ayah: Ayah) => void;
   selectedAyahId?: number;
+  highlightAyahId?: string | null;
 }
 
-export function MushafPage({ page, onAyahTap, selectedAyahId }: MushafPageProps) {
-  const { settings, audio, setAudio, togglePlayback } = useApp();
+export function MushafPage({ page, onAyahTap, selectedAyahId, highlightAyahId }: MushafPageProps) {
+  const { settings, audio, setAudio, togglePlayback, isBookmarked } = useApp();
 
   return (
     <div className="mushaf-page" dir="rtl">
@@ -99,26 +100,36 @@ export function MushafPage({ page, onAyahTap, selectedAyahId }: MushafPageProps)
           if (segment.type === "ayahs" && segment.ayahs) {
             return (
               <div key={`ayahs-${segIdx}`} className="mushaf-ayah-block">
-                {segment.ayahs.map((ayah) => (
-                  <span
-                    key={ayah.id}
-                    onClick={(e) => { e.stopPropagation(); onAyahTap(ayah); }}
-                    className={cn(
-                      "mushaf-ayah-inline cursor-pointer transition-colors duration-200",
-                      selectedAyahId === ayah.id && "mushaf-ayah-highlight"
-                    )}
-                  >
+                {segment.ayahs.map((ayah) => {
+                  const bookmarked = isBookmarked(ayah.surahId, ayah.numberInSurah);
+                  const isHighlighted = highlightAyahId === `${ayah.surahId}:${ayah.numberInSurah}`;
+                  return (
                     <span
-                      className="font-quran"
-                      style={{ fontSize: `${settings.fontSize}px` }}
+                      key={ayah.id}
+                      id={`ayah-${ayah.surahId}-${ayah.numberInSurah}`}
+                      onClick={(e) => { e.stopPropagation(); onAyahTap(ayah); }}
+                      className={cn(
+                        "mushaf-ayah-inline cursor-pointer transition-colors duration-200 relative",
+                        selectedAyahId === ayah.id && "mushaf-ayah-highlight",
+                        bookmarked && "bg-primary/10 rounded-sm",
+                        isHighlighted && "bg-primary/20 ring-1 ring-primary/40 rounded-sm"
+                      )}
                     >
-                      {ayah.textArabic}
+                      {bookmarked && (
+                        <Bookmark className="inline-block h-3 w-3 text-primary/60 mr-0.5 -mt-1" />
+                      )}
+                      <span
+                        className="font-quran"
+                        style={{ fontSize: `${settings.fontSize}px` }}
+                      >
+                        {ayah.textArabic}
+                      </span>
+                      <span className="mushaf-ayah-number">
+                        {toArabicNumber(ayah.numberInSurah)}
+                      </span>
                     </span>
-                    <span className="mushaf-ayah-number">
-                      {toArabicNumber(ayah.numberInSurah)}
-                    </span>
-                  </span>
-                ))}
+                  );
+                })}
                 {settings.showTranslation && segment.ayahs.length > 0 && (
                   <div className="mushaf-translation-block" dir="ltr">
                     {segment.ayahs.map((ayah) => (
