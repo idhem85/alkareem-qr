@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { BookOpen, ChevronRight, Sparkles, CalendarDays, Play, Pause, SkipBack, SkipForward, Headphones } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useMemo } from "react";
+import { PrayerTimes } from "@/components/home/PrayerTimes";
 import { toArabicNumber } from "@/data/ayahs";
 
 function useHijriDate() {
@@ -185,6 +186,9 @@ export default function Index() {
           </div>
         </Card>
       )}
+
+      {/* Prayer Times */}
+      <PrayerTimes />
 
       <Link to={`/surah/${todayVerse.surahId}`} className="block mt-4">
         <Card className="overflow-hidden border-border/50 hover-scale">
