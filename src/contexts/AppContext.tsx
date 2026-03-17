@@ -26,6 +26,7 @@ interface Settings {
   translationLang: string;
   reciter: string;
   language: string;
+  prayerTimezone?: string;
 }
 
 interface AppContextType {

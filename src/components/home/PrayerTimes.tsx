@@ -60,6 +60,24 @@ const prayerIcons = [
   { key: "Isha", icon: Moon, nameKey: "isha" as const },
 ];
 
+const timezoneCoords: Record<string, { lat: number; lng: number; name: string }> = {
+  "Europe/Paris": { lat: 48.8566, lng: 2.3522, name: "Paris" },
+  "Europe/London": { lat: 51.5074, lng: -0.1278, name: "London" },
+  "Europe/Istanbul": { lat: 41.0082, lng: 28.9784, name: "Istanbul" },
+  "Asia/Riyadh": { lat: 24.7136, lng: 46.6753, name: "Riyadh" },
+  "Asia/Dubai": { lat: 25.2048, lng: 55.2708, name: "Dubai" },
+  "Africa/Cairo": { lat: 30.0444, lng: 31.2357, name: "Cairo" },
+  "Africa/Casablanca": { lat: 33.5731, lng: -7.5898, name: "Casablanca" },
+  "Africa/Algiers": { lat: 36.7538, lng: 3.0588, name: "Algiers" },
+  "Africa/Tunis": { lat: 36.8065, lng: 10.1815, name: "Tunis" },
+  "Asia/Karachi": { lat: 24.8607, lng: 67.0011, name: "Karachi" },
+  "Asia/Dhaka": { lat: 23.8103, lng: 90.4125, name: "Dhaka" },
+  "Asia/Jakarta": { lat: -6.2088, lng: 106.8456, name: "Jakarta" },
+  "Asia/Kuala_Lumpur": { lat: 3.139, lng: 101.6869, name: "Kuala Lumpur" },
+  "America/New_York": { lat: 40.7128, lng: -74.006, name: "New York" },
+  "America/Toronto": { lat: 43.6532, lng: -79.3832, name: "Toronto" },
+};
+
 function getNextPrayer(timings: PrayerTimesData): string | null {
   const now = new Date();
   const currentMinutes = now.getHours() * 60 + now.getMinutes();
@@ -77,6 +95,7 @@ export function PrayerTimes() {
   const { settings } = useApp();
   const lang = (settings.language || "fr") as keyof typeof labels;
   const t = labels[lang] || labels.fr;
+  const prayerTimezone = settings.prayerTimezone || "auto";
 
   const [timings, setTimings] = useState<PrayerTimesData | null>(null);
   const [city, setCity] = useState<string>("");
@@ -86,7 +105,7 @@ export function PrayerTimes() {
   useEffect(() => {
     let cancelled = false;
 
-    async function fetchPrayerTimes(lat: number, lng: number) {
+    async function fetchPrayerTimes(lat: number, lng: number, cityName?: string) {
       try {
         const today = new Date();
         const dd = today.getDate();
@@ -100,7 +119,7 @@ export function PrayerTimes() {
 
         if (!cancelled && data.code === 200) {
           setTimings(data.data.timings);
-          setCity(data.data.meta?.timezone?.split("/").pop()?.replace(/_/g, " ") || "");
+          setCity(cityName || data.data.meta?.timezone?.split("/").pop()?.replace(/_/g, " ") || "");
         }
       } catch {
         if (!cancelled) setError(t.error);
@@ -109,21 +128,24 @@ export function PrayerTimes() {
       }
     }
 
-    if ("geolocation" in navigator) {
+    setLoading(true);
+    setError(null);
+
+    if (prayerTimezone !== "auto" && timezoneCoords[prayerTimezone]) {
+      const tz = timezoneCoords[prayerTimezone];
+      fetchPrayerTimes(tz.lat, tz.lng, tz.name);
+    } else if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (pos) => fetchPrayerTimes(pos.coords.latitude, pos.coords.longitude),
-        () => {
-          // Fallback: Paris
-          fetchPrayerTimes(48.8566, 2.3522);
-        },
+        () => fetchPrayerTimes(48.8566, 2.3522, "Paris"),
         { timeout: 5000 }
       );
     } else {
-      fetchPrayerTimes(48.8566, 2.3522);
+      fetchPrayerTimes(48.8566, 2.3522, "Paris");
     }
 
     return () => { cancelled = true; };
-  }, [t.error]);
+  }, [t.error, prayerTimezone]);
 
   const nextPrayer = useMemo(() => (timings ? getNextPrayer(timings) : null), [timings]);
 
