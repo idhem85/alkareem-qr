@@ -187,6 +187,9 @@ export default function Index() {
         </Card>
       )}
 
+      {/* Prayer Times */}
+      <PrayerTimes />
+
       <Link to={`/surah/${todayVerse.surahId}`} className="block mt-4">
         <Card className="overflow-hidden border-border/50 hover-scale">
           <div className="px-5 py-5 text-center">
