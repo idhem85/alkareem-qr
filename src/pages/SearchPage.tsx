@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Search, BookOpen, Hash, Layers, FileText } from "lucide-react";
+import { Search, BookOpen, Hash, Layers, BookMarked } from "lucide-react";
 import { surahs } from "@/data/surahs";
 import { ayahsBySurah, type Ayah, toArabicNumber } from "@/data/ayahs";
 import { Link } from "react-router-dom";
@@ -8,20 +8,19 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useApp } from "@/contexts/AppContext";
 
-type SearchTab = "surah" | "verse" | "juz" | "page" | "text";
+type SearchTab = "surah" | "verse" | "juz" | "hizb" | "text";
 
 const tabs: { id: SearchTab; label: string; labelAr: string; labelEn: string; icon: typeof Search }[] = [
   { id: "text", label: "Texte", labelAr: "نص", labelEn: "Text", icon: Search },
   { id: "surah", label: "Sourate", labelAr: "سورة", labelEn: "Surah", icon: BookOpen },
   { id: "verse", label: "Verset", labelAr: "آية", labelEn: "Verse", icon: Hash },
   { id: "juz", label: "Juz", labelAr: "جزء", labelEn: "Juz", icon: Layers },
-  { id: "page", label: "Page", labelAr: "صفحة", labelEn: "Page", icon: FileText },
+  { id: "hizb", label: "Hizb", labelAr: "حزب", labelEn: "Hizb", icon: BookMarked },
 ];
 
-// Mock Juz data (30 juz)
+// Juz data (30 juz)
 const juzData = Array.from({ length: 30 }, (_, i) => {
   const juzNum = i + 1;
-  // Approximate starting surah for each juz
   const startSurahs: Record<number, { surahId: number; ayah: number }> = {
     1: { surahId: 1, ayah: 1 }, 2: { surahId: 2, ayah: 142 }, 3: { surahId: 2, ayah: 253 },
     4: { surahId: 3, ayah: 93 }, 5: { surahId: 4, ayah: 24 }, 6: { surahId: 4, ayah: 148 },
@@ -46,7 +45,55 @@ const juzData = Array.from({ length: 30 }, (_, i) => {
   };
 });
 
-const TOTAL_PAGES = 604;
+// Hizb data (60 hizbs, 2 per juz)
+const hizbStartData: Record<number, { surahId: number; ayah: number }> = {
+  1: { surahId: 1, ayah: 1 }, 2: { surahId: 2, ayah: 75 },
+  3: { surahId: 2, ayah: 142 }, 4: { surahId: 2, ayah: 203 },
+  5: { surahId: 2, ayah: 253 }, 6: { surahId: 3, ayah: 15 },
+  7: { surahId: 3, ayah: 93 }, 8: { surahId: 3, ayah: 171 },
+  9: { surahId: 4, ayah: 24 }, 10: { surahId: 4, ayah: 88 },
+  11: { surahId: 4, ayah: 148 }, 12: { surahId: 5, ayah: 27 },
+  13: { surahId: 5, ayah: 82 }, 14: { surahId: 6, ayah: 36 },
+  15: { surahId: 6, ayah: 111 }, 16: { surahId: 7, ayah: 1 },
+  17: { surahId: 7, ayah: 88 }, 18: { surahId: 7, ayah: 171 },
+  19: { surahId: 8, ayah: 41 }, 20: { surahId: 9, ayah: 34 },
+  21: { surahId: 9, ayah: 93 }, 22: { surahId: 10, ayah: 26 },
+  23: { surahId: 11, ayah: 6 }, 24: { surahId: 11, ayah: 83 },
+  25: { surahId: 12, ayah: 53 }, 26: { surahId: 13, ayah: 19 },
+  27: { surahId: 15, ayah: 1 }, 28: { surahId: 16, ayah: 51 },
+  29: { surahId: 17, ayah: 1 }, 30: { surahId: 17, ayah: 99 },
+  31: { surahId: 18, ayah: 75 }, 32: { surahId: 19, ayah: 75 },
+  33: { surahId: 21, ayah: 1 }, 34: { surahId: 22, ayah: 1 },
+  35: { surahId: 23, ayah: 1 }, 36: { surahId: 24, ayah: 21 },
+  37: { surahId: 25, ayah: 21 }, 38: { surahId: 26, ayah: 111 },
+  39: { surahId: 27, ayah: 56 }, 40: { surahId: 28, ayah: 51 },
+  41: { surahId: 29, ayah: 46 }, 42: { surahId: 31, ayah: 22 },
+  43: { surahId: 33, ayah: 31 }, 44: { surahId: 34, ayah: 24 },
+  45: { surahId: 36, ayah: 28 }, 46: { surahId: 37, ayah: 145 },
+  47: { surahId: 39, ayah: 32 }, 48: { surahId: 40, ayah: 41 },
+  49: { surahId: 41, ayah: 47 }, 50: { surahId: 43, ayah: 24 },
+  51: { surahId: 46, ayah: 1 }, 52: { surahId: 48, ayah: 18 },
+  53: { surahId: 51, ayah: 31 }, 54: { surahId: 54, ayah: 1 },
+  55: { surahId: 58, ayah: 1 }, 56: { surahId: 60, ayah: 7 },
+  57: { surahId: 67, ayah: 1 }, 58: { surahId: 72, ayah: 1 },
+  59: { surahId: 78, ayah: 1 }, 60: { surahId: 89, ayah: 1 },
+};
+
+const hizbData = Array.from({ length: 60 }, (_, i) => {
+  const hizbNum = i + 1;
+  const start = hizbStartData[hizbNum] || { surahId: 1, ayah: 1 };
+  const surah = surahs.find(s => s.id === start.surahId);
+  const juzNum = Math.ceil(hizbNum / 2);
+  return {
+    number: hizbNum,
+    nameArabic: `الحزب ${toArabicNumber(hizbNum)}`,
+    juzNumber: juzNum,
+    startSurah: surah?.nameArabic || "",
+    startSurahTranslit: surah?.nameTransliteration || "",
+    startSurahId: start.surahId,
+    startAyah: start.ayah,
+  };
+});
 
 function getTabLabel(tab: typeof tabs[0], lang: string) {
   if (lang === "ar") return tab.labelAr;
@@ -59,7 +106,6 @@ export default function SearchPage() {
   const [activeTab, setActiveTab] = useState<SearchTab>("text");
   const [surahInput, setSurahInput] = useState("");
   const [verseInput, setVerseInput] = useState("");
-  const [pageInput, setPageInput] = useState("");
   const { settings } = useApp();
   const lang = settings.language || "fr";
 
@@ -93,23 +139,21 @@ export default function SearchPage() {
   const verseNum = parseInt(verseInput) || 0;
   const verseSurah = surahs.find(s => s.id === verseSurahId);
 
-  // Page
-  const pageNum = parseInt(pageInput) || 0;
-  const pageValid = pageNum >= 1 && pageNum <= TOTAL_PAGES;
-  // Map page to approximate surah
-  const pageSurahId = pageValid ? Math.min(Math.ceil(pageNum / 5), 114) : 0;
-  const pageSurah = surahs.find(s => s.id === pageSurahId);
-
   // Juz filter
   const juzQuery = query.toLowerCase();
   const filteredJuz = query.length > 0
     ? juzData.filter(j => j.number.toString().includes(query) || j.nameArabic.includes(query))
     : juzData;
 
+  // Hizb filter
+  const filteredHizb = query.length > 0
+    ? hizbData.filter(h => h.number.toString().includes(query) || h.nameArabic.includes(query))
+    : hizbData;
+
   const labels = {
-    fr: { title: "Recherche", placeholder: "Rechercher dans le Coran...", min2: "Tapez au moins 2 caractères pour rechercher.", noResult: "Aucun résultat pour", results: "résultat(s)", surahPlaceholder: "Nom ou numéro de sourate...", verseSurah: "N° de sourate", verseAyah: "N° de verset", goToVerse: "Aller au verset", invalidVerse: "Verset introuvable. Vérifiez le numéro de sourate et d'ayah.", pagePlaceholder: "Numéro de page (1-604)...", goToPage: "Aller à la page", juzPlaceholder: "Numéro de Juz...", ayah: "Ayah", versets: "versets" },
-    ar: { title: "البحث", placeholder: "ابحث في القرآن...", min2: "اكتب حرفين على الأقل للبحث.", noResult: "لا توجد نتائج لـ", results: "نتيجة", surahPlaceholder: "اسم أو رقم السورة...", verseSurah: "رقم السورة", verseAyah: "رقم الآية", goToVerse: "الذهاب إلى الآية", invalidVerse: "الآية غير موجودة. تحقق من الرقم.", pagePlaceholder: "رقم الصفحة (١-٦٠٤)...", goToPage: "الذهاب إلى الصفحة", juzPlaceholder: "رقم الجزء...", ayah: "آية", versets: "آيات" },
-    en: { title: "Search", placeholder: "Search in the Quran...", min2: "Type at least 2 characters to search.", noResult: "No results for", results: "result(s)", surahPlaceholder: "Surah name or number...", verseSurah: "Surah number", verseAyah: "Verse number", goToVerse: "Go to verse", invalidVerse: "Verse not found. Check surah and ayah number.", pagePlaceholder: "Page number (1-604)...", goToPage: "Go to page", juzPlaceholder: "Juz number...", ayah: "Ayah", versets: "verses" },
+    fr: { title: "Recherche", placeholder: "Rechercher dans le Coran...", min2: "Tapez au moins 2 caractères pour rechercher.", noResult: "Aucun résultat pour", results: "résultat(s)", surahPlaceholder: "Nom ou numéro de sourate...", verseSurah: "N° de sourate", verseAyah: "N° de verset", goToVerse: "Aller au verset", invalidVerse: "Verset introuvable. Vérifiez le numéro de sourate et d'ayah.", juzPlaceholder: "Numéro de Juz...", hizbPlaceholder: "Numéro de Hizb...", ayah: "Ayah", versets: "versets", juz: "Juz" },
+    ar: { title: "البحث", placeholder: "ابحث في القرآن...", min2: "اكتب حرفين على الأقل للبحث.", noResult: "لا توجد نتائج لـ", results: "نتيجة", surahPlaceholder: "اسم أو رقم السورة...", verseSurah: "رقم السورة", verseAyah: "رقم الآية", goToVerse: "الذهاب إلى الآية", invalidVerse: "الآية غير موجودة. تحقق من الرقم.", juzPlaceholder: "رقم الجزء...", hizbPlaceholder: "رقم الحزب...", ayah: "آية", versets: "آيات", juz: "جزء" },
+    en: { title: "Search", placeholder: "Search in the Quran...", min2: "Type at least 2 characters to search.", noResult: "No results for", results: "result(s)", surahPlaceholder: "Surah name or number...", verseSurah: "Surah number", verseAyah: "Verse number", goToVerse: "Go to verse", invalidVerse: "Verse not found. Check surah and ayah number.", juzPlaceholder: "Juz number...", hizbPlaceholder: "Hizb number...", ayah: "Ayah", versets: "verses", juz: "Juz" },
   };
   const t = labels[lang as keyof typeof labels] || labels.fr;
 
@@ -288,40 +332,38 @@ export default function SearchPage() {
         </>
       )}
 
-      {/* PAGE */}
-      {activeTab === "page" && (
+      {/* HIZB */}
+      {activeTab === "hizb" && (
         <>
           <div className="relative mb-4">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              type="number"
-              placeholder={t.pagePlaceholder}
-              value={pageInput}
-              onChange={e => setPageInput(e.target.value)}
-              min={1}
-              max={604}
+              placeholder={t.hizbPlaceholder}
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              className="pl-10"
               autoFocus
             />
           </div>
-          {pageValid && pageSurah && (
-            <Link to={`/surah/${pageSurahId}`}>
-              <Card className="p-4 hover-scale bg-primary/5 border-primary/20">
-                <p className="text-sm font-semibold text-primary">{t.goToPage} {pageNum}</p>
-                <p className="text-xs text-muted-foreground mt-1">≈ {pageSurah.nameTransliteration} ({pageSurah.nameArabic})</p>
-              </Card>
-            </Link>
-          )}
-          {/* Page grid */}
-          <div className="grid grid-cols-4 sm:grid-cols-5 gap-1.5 mt-4">
-            {Array.from({ length: 30 }, (_, i) => {
-              const p = i * 20 + 1;
-              return (
-                <Link key={p} to={`/surah/${Math.min(Math.ceil(p / 5), 114)}`}>
-                  <Card className="p-2 text-center hover-scale">
-                    <p className="text-xs font-semibold">{p}</p>
-                  </Card>
-                </Link>
-              );
-            })}
+          <div className="space-y-2">
+            {filteredHizb.map(h => (
+              <Link key={h.number} to={`/surah/${h.startSurahId}`}>
+                <Card className="p-3 hover-scale flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-accent/10 flex items-center justify-center">
+                      <span className="text-sm font-bold text-accent">{h.number}</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-sm">{h.nameArabic}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {h.startSurahTranslit} • {t.ayah} {toArabicNumber(h.startAyah)} • {t.juz} {h.juzNumber}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="font-arabic text-base text-accent">{h.startSurah}</p>
+                </Card>
+              </Link>
+            ))}
           </div>
         </>
       )}
