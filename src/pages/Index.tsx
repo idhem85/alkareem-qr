@@ -127,6 +127,28 @@ export default function Index() {
         </div>
       </div>
 
+      {/* Verse of the Day — compact */}
+      <Link to={`/surah/${todayVerse.surahId}`} className="block">
+        <Card className="overflow-hidden border-border/50 hover-scale px-4 py-3">
+          <div className="flex items-center gap-2 mb-2">
+            <Sparkles className="h-3 w-3 text-accent" />
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-accent">
+              {t.verseOfDay}
+            </span>
+          </div>
+          <p className="font-quran text-lg leading-[2] text-foreground" dir="rtl">
+            {todayVerse.text}
+          </p>
+          <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+            {getVerseTranslation(todayVerse, lang)}
+          </p>
+          <p className="font-arabic text-[10px] text-accent/70 mt-1">{todayVerse.reference}</p>
+        </Card>
+      </Link>
+
+      {/* Prayer Times */}
+      <PrayerTimes />
+
       {/* Continue Reading */}
       {lastSurah && readingProgress && (
         <Link to={`/surah/${lastSurah.id}`}>
@@ -186,30 +208,6 @@ export default function Index() {
           </div>
         </Card>
       )}
-
-      {/* Prayer Times */}
-      <PrayerTimes />
-
-      <Link to={`/surah/${todayVerse.surahId}`} className="block mt-4">
-        <Card className="overflow-hidden border-border/50 hover-scale">
-          <div className="px-5 py-5 text-center">
-            <div className="flex items-center justify-center gap-2 mb-3">
-              <Sparkles className="h-3.5 w-3.5 text-accent" />
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-accent">
-                {t.verseOfDay}
-              </span>
-              <Sparkles className="h-3.5 w-3.5 text-accent" />
-            </div>
-            <p className="font-quran text-2xl leading-[2.4] mb-3 text-foreground" dir="rtl">
-              {todayVerse.text}
-            </p>
-            <p className="text-sm text-muted-foreground mb-2 leading-relaxed">
-              {getVerseTranslation(todayVerse, lang)}
-            </p>
-            <p className="font-arabic text-xs text-accent/70">{todayVerse.reference}</p>
-          </div>
-        </Card>
-      </Link>
 
       {/* Popular Surahs — matching SearchPage surah layout */}
       <div>
