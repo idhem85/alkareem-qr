@@ -8,12 +8,11 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useApp } from "@/contexts/AppContext";
 
-type SearchTab = "surah" | "verse" | "juz" | "hizb" | "text";
+type SearchTab = "surah" | "juz" | "hizb" | "text";
 
 const tabs: { id: SearchTab; label: string; labelAr: string; labelEn: string; icon: typeof Search }[] = [
   { id: "text", label: "Texte", labelAr: "نص", labelEn: "Text", icon: Search },
   { id: "surah", label: "Sourate", labelAr: "سورة", labelEn: "Surah", icon: BookOpen },
-  { id: "verse", label: "Verset", labelAr: "آية", labelEn: "Verse", icon: Hash },
   { id: "juz", label: "Juz", labelAr: "جزء", labelEn: "Juz", icon: Layers },
   { id: "hizb", label: "Hizb", labelAr: "حزب", labelEn: "Hizb", icon: BookMarked },
 ];
