@@ -64,7 +64,7 @@ export default function BookmarksPage() {
             return (
               <Card key={`${b.surahId}-${b.ayahNumber}`} className="p-4">
                 <div className="flex items-start justify-between gap-3">
-                  <Link to={`/surah/${b.surahId}`} className="flex-1 hover-scale min-w-0">
+                  <Link to={`/surah/${b.surahId}?ayah=${b.ayahNumber}`} className="flex-1 hover-scale min-w-0">
                     <p className="text-xs text-accent mb-2 font-arabic">
                       {surah?.nameArabic} • {t.ayah} {toArabicNumber(b.ayahNumber)}
                     </p>

@@ -226,6 +226,7 @@ export default function MushafReader() {
             updateReadingProgress(ayah.surahId, ayah.numberInSurah);
           }}
           selectedAyahId={selectedAyah?.id}
+          highlightAyahId={highlightAyahId}
         />
       </div>
 
