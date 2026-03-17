@@ -120,18 +120,25 @@ export function AyahDrawer({ ayah, open, onOpenChange }: AyahDrawerProps) {
 
         <Tabs defaultValue="translation" className="p-4 overflow-y-auto">
           <TabsList className="w-full">
-            <TabsTrigger value="translation" className="flex-1">الترجمة</TabsTrigger>
-            <TabsTrigger value="tafsir" className="flex-1">التفسير</TabsTrigger>
+            <TabsTrigger value="translation" className="flex-1">
+              {lang === "ar" ? "الترجمة" : lang === "en" ? "Translation" : "Traduction"}
+            </TabsTrigger>
+            <TabsTrigger value="tafsir" className="flex-1">
+              {lang === "ar" ? "التفسير" : "Tafsir"}
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="translation" className="mt-4">
-            <p className="text-sm leading-relaxed text-foreground">{ayah.translationFr}</p>
+            <p className="text-sm leading-relaxed text-foreground" dir={lang === "ar" ? "rtl" : "ltr"}>{translation}</p>
           </TabsContent>
           <TabsContent value="tafsir" className="mt-4">
-            {ayah.tafsir ? (
-              <p className="text-sm leading-relaxed text-foreground">{ayah.tafsir}</p>
+            {tafsirText ? (
+              <>
+                <p className="text-xs text-muted-foreground mb-2">{tafsirLabel}</p>
+                <p className="text-sm leading-relaxed text-foreground" dir="rtl">{tafsirText}</p>
+              </>
             ) : (
               <p className="text-sm text-muted-foreground text-center py-6">
-                التفسير غير متوفر حالياً
+                {noTafsirMsg}
               </p>
             )}
           </TabsContent>
