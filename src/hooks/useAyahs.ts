@@ -20,7 +20,7 @@ export function useAyahs(surahId: number) {
     const controller = new AbortController();
 
     fetch(
-      `https://api.alquran.cloud/v1/surah/${surahId}/editions/quran-uthmani,fr.hamidullah`,
+      `https://api.alquran.cloud/v1/surah/${surahId}/editions/quran-uthmani,fr.hamidullah,en.sahih,ar.muyassar`,
       { signal: controller.signal }
     )
       .then(res => res.json())
@@ -28,6 +28,8 @@ export function useAyahs(surahId: number) {
         if (data.code === 200 && data.data?.length >= 2) {
           const arabicAyahs = data.data[0].ayahs;
           const frAyahs = data.data[1].ayahs;
+          const enAyahs = data.data[2]?.ayahs || [];
+          const tafsirArAyahs = data.data[3]?.ayahs || [];
           
           const mapped: Ayah[] = arabicAyahs.map((a: any, i: number) => ({
             id: a.number,
@@ -35,7 +37,11 @@ export function useAyahs(surahId: number) {
             numberInSurah: a.numberInSurah,
             textArabic: a.text,
             translationFr: frAyahs[i]?.text || "",
-            tafsir: "",
+            translationEn: enAyahs[i]?.text || "",
+            tafsir: tafsirArAyahs[i]?.text || "",
+            tafsirAr: tafsirArAyahs[i]?.text || "",
+            tafsirFr: "",
+            tafsirEn: "",
           }));
 
           cache[surahId] = mapped;
@@ -61,19 +67,25 @@ export function useAyahs(surahId: number) {
  */
 export function prefetchSurah(surahId: number) {
   if (cache[surahId] || surahId < 1 || surahId > 114) return;
-  fetch(`https://api.alquran.cloud/v1/surah/${surahId}/editions/quran-uthmani,fr.hamidullah`)
+  fetch(`https://api.alquran.cloud/v1/surah/${surahId}/editions/quran-uthmani,fr.hamidullah,en.sahih,ar.muyassar`)
     .then(res => res.json())
     .then(data => {
       if (data.code === 200 && data.data?.length >= 2) {
         const arabicAyahs = data.data[0].ayahs;
         const frAyahs = data.data[1].ayahs;
+        const enAyahs = data.data[2]?.ayahs || [];
+        const tafsirArAyahs = data.data[3]?.ayahs || [];
         cache[surahId] = arabicAyahs.map((a: any, i: number) => ({
           id: a.number,
           surahId,
           numberInSurah: a.numberInSurah,
           textArabic: a.text,
           translationFr: frAyahs[i]?.text || "",
-          tafsir: "",
+          translationEn: enAyahs[i]?.text || "",
+          tafsir: tafsirArAyahs[i]?.text || "",
+          tafsirAr: tafsirArAyahs[i]?.text || "",
+          tafsirFr: "",
+          tafsirEn: "",
         }));
       }
     })

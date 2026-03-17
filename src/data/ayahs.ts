@@ -4,7 +4,12 @@ export interface Ayah {
   numberInSurah: number;
   textArabic: string;
   translationFr: string;
+  translationEn?: string;
+  translationAr?: string;
   tafsir: string;
+  tafsirAr?: string;
+  tafsirFr?: string;
+  tafsirEn?: string;
 }
 
 export const ayahsBySurah: Record<number, Ayah[]> = {
