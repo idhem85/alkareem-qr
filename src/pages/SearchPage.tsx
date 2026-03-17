@@ -200,7 +200,7 @@ export default function SearchPage() {
             <div className="space-y-3">
               <p className="text-xs text-muted-foreground">{textResults.length} {t.results}</p>
               {textResults.map(r => (
-                <Link key={r.id} to={`/surah/${r.surahId}`}>
+                <Link key={r.id} to={`/surah/${r.surahId}?ayah=${r.numberInSurah}`}>
                   <Card className="p-4 hover-scale">
                     <p className="text-xs text-accent mb-2">{r.surahName} • {t.ayah} {toArabicNumber(r.numberInSurah)}</p>
                     <p className="font-quran text-lg leading-relaxed mb-2" dir="rtl">{r.textArabic}</p>
@@ -253,7 +253,7 @@ export default function SearchPage() {
               />
             </div>
             {verseSurahId > 0 && verseNum > 0 && verseSurah && verseNum <= verseSurah.ayahCount && (
-              <Link to={`/surah/${verseSurahId}`} className="block mt-2">
+              <Link to={`/surah/${verseSurahId}?ayah=${verseNum}`} className="block mt-2">
                 <div className="p-2 rounded-lg bg-primary/10 border border-primary/20 text-center">
                   <p className="text-xs font-semibold text-primary">{verseSurah.nameTransliteration} {verseSurahId}:{verseNum}</p>
                 </div>
