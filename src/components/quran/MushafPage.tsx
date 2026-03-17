@@ -26,10 +26,11 @@ interface MushafPageProps {
   page: PageContent;
   onAyahTap: (ayah: Ayah) => void;
   selectedAyahId?: number;
+  highlightAyahId?: string | null;
 }
 
-export function MushafPage({ page, onAyahTap, selectedAyahId }: MushafPageProps) {
-  const { settings, audio, setAudio, togglePlayback } = useApp();
+export function MushafPage({ page, onAyahTap, selectedAyahId, highlightAyahId }: MushafPageProps) {
+  const { settings, audio, setAudio, togglePlayback, isBookmarked } = useApp();
 
   return (
     <div className="mushaf-page" dir="rtl">
