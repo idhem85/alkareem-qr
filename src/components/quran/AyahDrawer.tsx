@@ -21,12 +21,30 @@ interface AyahDrawerProps {
 }
 
 export function AyahDrawer({ ayah, open, onOpenChange }: AyahDrawerProps) {
-  const { isBookmarked, addBookmark, removeBookmark, setAudio } = useApp();
+  const { isBookmarked, addBookmark, removeBookmark, setAudio, settings } = useApp();
 
   if (!ayah) return null;
 
   const surah = surahs.find(s => s.id === ayah.surahId);
   const bookmarked = isBookmarked(ayah.surahId, ayah.numberInSurah);
+  const lang = settings.language || "fr";
+
+  const translation = useMemo(() => {
+    if (lang === "en") return ayah.translationEn || ayah.translationFr;
+    if (lang === "ar") return ayah.translationAr || ayah.translationFr;
+    return ayah.translationFr;
+  }, [ayah, lang]);
+
+  const tafsirText = useMemo(() => {
+    // Arabic tafsir is always available from API (ar.muyassar)
+    if (lang === "ar") return ayah.tafsirAr || ayah.tafsir || "";
+    if (lang === "en") return ayah.tafsirEn || ayah.tafsirAr || ayah.tafsir || "";
+    if (lang === "fr") return ayah.tafsirFr || ayah.tafsirAr || ayah.tafsir || "";
+    return ayah.tafsir || "";
+  }, [ayah, lang]);
+
+  const tafsirLabel = lang === "ar" ? "التفسير الميسر" : lang === "en" ? "Tafsir (Al-Muyassar)" : "Tafsir (Al-Muyassar)";
+  const noTafsirMsg = lang === "ar" ? "التفسير غير متوفر حالياً" : lang === "en" ? "Tafsir not available yet." : "Tafsir non disponible pour le moment.";
 
   const handleCopy = () => {
     navigator.clipboard.writeText(ayah.textArabic);
