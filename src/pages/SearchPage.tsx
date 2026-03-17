@@ -8,12 +8,11 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useApp } from "@/contexts/AppContext";
 
-type SearchTab = "surah" | "verse" | "juz" | "hizb" | "text";
+type SearchTab = "surah" | "juz" | "hizb" | "text";
 
 const tabs: { id: SearchTab; label: string; labelAr: string; labelEn: string; icon: typeof Search }[] = [
   { id: "text", label: "Texte", labelAr: "نص", labelEn: "Text", icon: Search },
   { id: "surah", label: "Sourate", labelAr: "سورة", labelEn: "Surah", icon: BookOpen },
-  { id: "verse", label: "Verset", labelAr: "آية", labelEn: "Verse", icon: Hash },
   { id: "juz", label: "Juz", labelAr: "جزء", labelEn: "Juz", icon: Layers },
   { id: "hizb", label: "Hizb", labelAr: "حزب", labelEn: "Hizb", icon: BookMarked },
 ];
@@ -214,7 +213,7 @@ export default function SearchPage() {
         </>
       )}
 
-      {/* SURAH LISTING */}
+      {/* SURAH LISTING + VERSE LOOKUP */}
       {activeTab === "surah" && (
         <>
           <div className="relative mb-4">
@@ -227,6 +226,45 @@ export default function SearchPage() {
               autoFocus
             />
           </div>
+
+          {/* Verse lookup section */}
+          <div className="mb-4 p-3 rounded-xl bg-secondary/50 border border-border/50">
+            <p className="text-xs font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
+              <Hash className="h-3 w-3" />
+              {t.goToVerse}
+            </p>
+            <div className="flex gap-2">
+              <Input
+                type="number"
+                placeholder={t.verseSurah}
+                value={surahInput}
+                onChange={e => setSurahInput(e.target.value)}
+                min={1}
+                max={114}
+                className="flex-1 h-8 text-xs"
+              />
+              <Input
+                type="number"
+                placeholder={t.verseAyah}
+                value={verseInput}
+                onChange={e => setVerseInput(e.target.value)}
+                min={1}
+                className="flex-1 h-8 text-xs"
+              />
+            </div>
+            {verseSurahId > 0 && verseNum > 0 && verseSurah && verseNum <= verseSurah.ayahCount && (
+              <Link to={`/surah/${verseSurahId}`} className="block mt-2">
+                <div className="p-2 rounded-lg bg-primary/10 border border-primary/20 text-center">
+                  <p className="text-xs font-semibold text-primary">{verseSurah.nameTransliteration} {verseSurahId}:{verseNum}</p>
+                </div>
+              </Link>
+            )}
+            {verseSurahId > 0 && verseNum > 0 && verseSurah && verseNum > verseSurah.ayahCount && (
+              <p className="text-center text-destructive mt-2 text-xs">{t.invalidVerse}</p>
+            )}
+          </div>
+
+          {/* Surah list */}
           <div className="space-y-2">
             {filteredSurahs.map(s => (
               <Link key={s.id} to={`/surah/${s.id}`}>
@@ -250,49 +288,6 @@ export default function SearchPage() {
               <p className="text-center text-muted-foreground py-12 text-sm">{t.noResult} « {surahInput} ».</p>
             )}
           </div>
-        </>
-      )}
-
-      {/* VERSE LOOKUP */}
-      {activeTab === "verse" && (
-        <>
-          <div className="flex gap-2 mb-4">
-            <div className="relative flex-1">
-              <Input
-                type="number"
-                placeholder={t.verseSurah}
-                value={surahInput}
-                onChange={e => setSurahInput(e.target.value)}
-                min={1}
-                max={114}
-              />
-            </div>
-            <div className="relative flex-1">
-              <Input
-                type="number"
-                placeholder={t.verseAyah}
-                value={verseInput}
-                onChange={e => setVerseInput(e.target.value)}
-                min={1}
-              />
-            </div>
-          </div>
-          {verseSurahId > 0 && verseSurah && (
-            <Card className="p-4 mb-3">
-              <p className="text-sm text-muted-foreground mb-1">{verseSurah.nameTransliteration} ({verseSurah.nameArabic})</p>
-              <p className="text-xs text-muted-foreground">{verseSurah.ayahCount} {t.versets}</p>
-            </Card>
-          )}
-          {verseSurahId > 0 && verseNum > 0 && verseSurah && verseNum <= verseSurah.ayahCount && (
-            <Link to={`/surah/${verseSurahId}`}>
-              <Card className="p-4 hover-scale bg-primary/5 border-primary/20">
-                <p className="text-sm font-semibold text-primary">{t.goToVerse}: {verseSurah.nameTransliteration} {verseSurahId}:{verseNum}</p>
-              </Card>
-            </Link>
-          )}
-          {verseSurahId > 0 && verseNum > 0 && verseSurah && verseNum > verseSurah.ayahCount && (
-            <p className="text-center text-destructive py-4 text-sm">{t.invalidVerse}</p>
-          )}
         </>
       )}
 
