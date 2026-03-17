@@ -1,6 +1,7 @@
 import { Ayah, toArabicNumber } from "@/data/ayahs";
 import { surahs } from "@/data/surahs";
 import { useApp } from "@/contexts/AppContext";
+import { useMemo } from "react";
 import {
   Drawer,
   DrawerContent,
