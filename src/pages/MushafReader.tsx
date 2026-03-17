@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { surahs } from "@/data/surahs";
 import { AyahDrawer } from "@/components/quran/AyahDrawer";
