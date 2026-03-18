@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Moon, Sun, Type, Languages, BookOpen, Globe, MapPin, Download, Check } from "lucide-react";
+import { Moon, Sun, Type, Languages, BookOpen, Globe, MapPin, Download, Check, Share, Plus, SquarePlus, Smartphone } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -68,9 +68,36 @@ export default function SettingsPage() {
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
   const labels = {
-    fr: { title: "Réglages", language: "Langue", appearance: "Apparence", typography: "Typographie", fontSize: "Taille du texte", translation: "Traduction", showTranslation: "Afficher la traduction", reciter: "Récitateur", prayerZone: "Fuseau horaire des prières", installApp: "Enregistrer sur mon écran d'accueil", installed: "Application installée", iosHint: "Appuie sur le bouton Partager puis « Sur l'écran d'accueil »" },
-    ar: { title: "الإعدادات", language: "اللغة", appearance: "المظهر", typography: "الخط", fontSize: "حجم الخط", translation: "الترجمة", showTranslation: "إظهار الترجمة", reciter: "القارئ", prayerZone: "المنطقة الزمنية للصلاة", installApp: "حفظ على الشاشة الرئيسية", installed: "التطبيق مثبّت", iosHint: "اضغط على زر المشاركة ثم « إضافة إلى الشاشة الرئيسية »" },
-    en: { title: "Settings", language: "Language", appearance: "Appearance", typography: "Typography", fontSize: "Font size", translation: "Translation", showTranslation: "Show translation", reciter: "Reciter", prayerZone: "Prayer timezone", installApp: "Add to Home Screen", installed: "App installed", iosHint: "Tap the Share button then 'Add to Home Screen'" },
+    fr: {
+      title: "Réglages", language: "Langue", appearance: "Apparence", typography: "Typographie", fontSize: "Taille du texte", translation: "Traduction", showTranslation: "Afficher la traduction", reciter: "Récitateur", prayerZone: "Fuseau horaire des prières",
+      installApp: "Installer l'application",
+      installDesc: "Accédez à Al Kareem directement depuis votre écran d'accueil",
+      installed: "Application installée ✓",
+      installBtn: "Installer",
+      iosStep1: "Appuyez sur l'icône Partager",
+      iosStep2: "Sélectionnez « Sur l'écran d'accueil »",
+      iosStep3: "Appuyez sur « Ajouter »",
+    },
+    ar: {
+      title: "الإعدادات", language: "اللغة", appearance: "المظهر", typography: "الخط", fontSize: "حجم الخط", translation: "الترجمة", showTranslation: "إظهار الترجمة", reciter: "القارئ", prayerZone: "المنطقة الزمنية للصلاة",
+      installApp: "تثبيت التطبيق",
+      installDesc: "افتح القرآن الكريم مباشرة من شاشتك الرئيسية",
+      installed: "التطبيق مثبّت ✓",
+      installBtn: "تثبيت",
+      iosStep1: "اضغط على أيقونة المشاركة",
+      iosStep2: "اختر « إضافة إلى الشاشة الرئيسية »",
+      iosStep3: "اضغط « إضافة »",
+    },
+    en: {
+      title: "Settings", language: "Language", appearance: "Appearance", typography: "Typography", fontSize: "Font size", translation: "Translation", showTranslation: "Show translation", reciter: "Reciter", prayerZone: "Prayer timezone",
+      installApp: "Install App",
+      installDesc: "Access Al Kareem directly from your home screen",
+      installed: "App installed ✓",
+      installBtn: "Install",
+      iosStep1: "Tap the Share icon",
+      iosStep2: "Select 'Add to Home Screen'",
+      iosStep3: "Tap 'Add'",
+    },
   };
   const t = labels[lang as keyof typeof labels] || labels.fr;
 
@@ -207,29 +234,48 @@ export default function SettingsPage() {
         </Card>
 
         {/* Install PWA */}
-        <Card className="p-3">
+        <Card className="p-4 border-primary/20">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+              <Smartphone className="h-5 w-5 text-primary" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold">{t.installApp}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{t.installDesc}</p>
+            </div>
+          </div>
+
           {isInstalled ? (
-            <div className="flex items-center gap-2 text-sm font-medium text-green-600">
+            <div className="flex items-center gap-2 mt-3 px-3 py-2 rounded-lg bg-accent/10 text-accent text-sm font-medium">
               <Check className="h-4 w-4" />
               {t.installed}
             </div>
           ) : isIOS ? (
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Download className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">{t.installApp}</span>
+            <div className="mt-3 space-y-2">
+              <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-secondary">
+                <span className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary shrink-0">1</span>
+                <Share className="h-4 w-4 text-muted-foreground shrink-0" />
+                <span className="text-xs">{t.iosStep1}</span>
               </div>
-              <p className="text-xs text-muted-foreground">{t.iosHint}</p>
+              <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-secondary">
+                <span className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary shrink-0">2</span>
+                <SquarePlus className="h-4 w-4 text-muted-foreground shrink-0" />
+                <span className="text-xs">{t.iosStep2}</span>
+              </div>
+              <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-secondary">
+                <span className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary shrink-0">3</span>
+                <Plus className="h-4 w-4 text-muted-foreground shrink-0" />
+                <span className="text-xs">{t.iosStep3}</span>
+              </div>
             </div>
           ) : (
             <Button
-              variant="outline"
-              className="w-full gap-2"
+              className="w-full mt-3 gap-2"
               onClick={handleInstall}
               disabled={!deferredPrompt}
             >
               <Download className="h-4 w-4" />
-              {t.installApp}
+              {t.installBtn}
             </Button>
           )}
         </Card>
