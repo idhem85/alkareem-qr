@@ -18,6 +18,7 @@ export function getGlobalAyahNumber(surahId: number, ayahInSurah: number): numbe
 export const RECITERS = [
   { id: "ar.alafasy", name: "Mishary Rashid Alafasy" },
   { id: "ar.abdurrahmaansudais", name: "Abdur-Rahman as-Sudais" },
+  { id: "ar.saoodshuraym", name: "Saad Al-Ghamidi" },
 ] as const;
 
 /**
