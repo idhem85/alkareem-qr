@@ -5,10 +5,10 @@ import { surahs } from "@/data/surahs";
 import { toArabicNumber } from "@/data/ayahs";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { getAyahAudioUrl } from "@/lib/quranAudio";
+import { getAyahAudioUrl, RECITERS } from "@/lib/quranAudio";
 
 export function AudioPlayer({ hideUI = false }: { hideUI?: boolean }) {
-  const { audio, togglePlayback, setAudio } = useApp();
+  const { audio, togglePlayback, setAudio, settings } = useApp();
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
