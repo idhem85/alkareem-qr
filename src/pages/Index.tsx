@@ -117,7 +117,7 @@ export default function Index() {
     : null;
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6 space-y-6 animate-fade-in">
+    <div className="max-w-2xl mx-auto px-4 py-6 space-y-7 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between py-3">
         <img src="/logo.png" alt="تراتيل — Tarātīl" className="h-24" />
