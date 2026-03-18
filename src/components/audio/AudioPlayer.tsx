@@ -37,7 +37,7 @@ export function AudioPlayer({ hideUI = false }: { hideUI?: boolean }) {
     if (audio.isPlaying) {
       audioRef.current.play().catch(() => {});
     }
-  }, [audio.currentSurahId, audio.currentAyah]);
+  }, [audio.currentSurahId, audio.currentAyah, settings.reciter]);
 
   useEffect(() => {
     if (!audioRef.current || !audio.currentSurahId) return;
