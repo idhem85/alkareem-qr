@@ -234,29 +234,48 @@ export default function SettingsPage() {
         </Card>
 
         {/* Install PWA */}
-        <Card className="p-3">
+        <Card className="p-4 border-primary/20">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+              <Smartphone className="h-5 w-5 text-primary" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold">{t.installApp}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{t.installDesc}</p>
+            </div>
+          </div>
+
           {isInstalled ? (
-            <div className="flex items-center gap-2 text-sm font-medium text-green-600">
+            <div className="flex items-center gap-2 mt-3 px-3 py-2 rounded-lg bg-accent/10 text-accent text-sm font-medium">
               <Check className="h-4 w-4" />
               {t.installed}
             </div>
           ) : isIOS ? (
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Download className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">{t.installApp}</span>
+            <div className="mt-3 space-y-2">
+              <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-secondary">
+                <span className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary shrink-0">1</span>
+                <Share className="h-4 w-4 text-muted-foreground shrink-0" />
+                <span className="text-xs">{t.iosStep1}</span>
               </div>
-              <p className="text-xs text-muted-foreground">{t.iosHint}</p>
+              <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-secondary">
+                <span className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary shrink-0">2</span>
+                <SquarePlus className="h-4 w-4 text-muted-foreground shrink-0" />
+                <span className="text-xs">{t.iosStep2}</span>
+              </div>
+              <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-secondary">
+                <span className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary shrink-0">3</span>
+                <Plus className="h-4 w-4 text-muted-foreground shrink-0" />
+                <span className="text-xs">{t.iosStep3}</span>
+              </div>
             </div>
           ) : (
             <Button
-              variant="outline"
-              className="w-full gap-2"
+              className="w-full mt-3 gap-2"
               onClick={handleInstall}
               disabled={!deferredPrompt}
             >
               <Download className="h-4 w-4" />
-              {t.installApp}
+              {t.installBtn}
             </Button>
           )}
         </Card>
