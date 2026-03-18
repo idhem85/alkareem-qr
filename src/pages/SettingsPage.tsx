@@ -3,9 +3,11 @@ import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Moon, Sun, Type, Languages, BookOpen, Globe, MapPin } from "lucide-react";
+import { Moon, Sun, Type, Languages, BookOpen, Globe, MapPin, Download, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 
 const languages = [
   { code: "fr", label: "FR", flag: "🇫🇷" },
@@ -36,10 +38,39 @@ export default function SettingsPage() {
   const { theme, toggleTheme, settings, updateSettings } = useApp();
   const lang = settings.language || "fr";
 
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isInstalled, setIsInstalled] = useState(false);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+
+    // Check if already installed
+    if (window.matchMedia("(display-mode: standalone)").matches) {
+      setIsInstalled(true);
+    }
+
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  const handleInstall = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === "accepted") setIsInstalled(true);
+      setDeferredPrompt(null);
+    }
+  };
+
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
   const labels = {
-    fr: { title: "Réglages", language: "Langue", appearance: "Apparence", typography: "Typographie", fontSize: "Taille du texte", translation: "Traduction", showTranslation: "Afficher la traduction", reciter: "Récitateur", prayerZone: "Fuseau horaire des prières" },
-    ar: { title: "الإعدادات", language: "اللغة", appearance: "المظهر", typography: "الخط", fontSize: "حجم الخط", translation: "الترجمة", showTranslation: "إظهار الترجمة", reciter: "القارئ", prayerZone: "المنطقة الزمنية للصلاة" },
-    en: { title: "Settings", language: "Language", appearance: "Appearance", typography: "Typography", fontSize: "Font size", translation: "Translation", showTranslation: "Show translation", reciter: "Reciter", prayerZone: "Prayer timezone" },
+    fr: { title: "Réglages", language: "Langue", appearance: "Apparence", typography: "Typographie", fontSize: "Taille du texte", translation: "Traduction", showTranslation: "Afficher la traduction", reciter: "Récitateur", prayerZone: "Fuseau horaire des prières", installApp: "Enregistrer sur mon écran d'accueil", installed: "Application installée", iosHint: "Appuie sur le bouton Partager puis « Sur l'écran d'accueil »" },
+    ar: { title: "الإعدادات", language: "اللغة", appearance: "المظهر", typography: "الخط", fontSize: "حجم الخط", translation: "الترجمة", showTranslation: "إظهار الترجمة", reciter: "القارئ", prayerZone: "المنطقة الزمنية للصلاة", installApp: "حفظ على الشاشة الرئيسية", installed: "التطبيق مثبّت", iosHint: "اضغط على زر المشاركة ثم « إضافة إلى الشاشة الرئيسية »" },
+    en: { title: "Settings", language: "Language", appearance: "Appearance", typography: "Typography", fontSize: "Font size", translation: "Translation", showTranslation: "Show translation", reciter: "Reciter", prayerZone: "Prayer timezone", installApp: "Add to Home Screen", installed: "App installed", iosHint: "Tap the Share button then 'Add to Home Screen'" },
   };
   const t = labels[lang as keyof typeof labels] || labels.fr;
 
@@ -173,6 +204,34 @@ export default function SettingsPage() {
             </span>
             <span className="text-xs text-muted-foreground">{settings.reciter}</span>
           </div>
+        </Card>
+
+        {/* Install PWA */}
+        <Card className="p-3">
+          {isInstalled ? (
+            <div className="flex items-center gap-2 text-sm font-medium text-green-600">
+              <Check className="h-4 w-4" />
+              {t.installed}
+            </div>
+          ) : isIOS ? (
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Download className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm font-medium">{t.installApp}</span>
+              </div>
+              <p className="text-xs text-muted-foreground">{t.iosHint}</p>
+            </div>
+          ) : (
+            <Button
+              variant="outline"
+              className="w-full gap-2"
+              onClick={handleInstall}
+              disabled={!deferredPrompt}
+            >
+              <Download className="h-4 w-4" />
+              {t.installApp}
+            </Button>
+          )}
         </Card>
       </div>
     </div>
