@@ -3,9 +3,11 @@ import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Moon, Sun, Type, Languages, BookOpen, Globe, MapPin } from "lucide-react";
+import { Moon, Sun, Type, Languages, BookOpen, Globe, MapPin, Download, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 
 const languages = [
   { code: "fr", label: "FR", flag: "🇫🇷" },
