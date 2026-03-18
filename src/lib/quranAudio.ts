@@ -15,10 +15,15 @@ export function getGlobalAyahNumber(surahId: number, ayahInSurah: number): numbe
   return cumulativeAyahs[surahId - 1] + ayahInSurah;
 }
 
+export const RECITERS = [
+  { id: "ar.alafasy", name: "Mishary Rashid Alafasy" },
+  { id: "ar.abdurrahmaansudais", name: "Abdur-Rahman as-Sudais" },
+] as const;
+
 /**
- * Get audio URL for a specific ayah using Alafasy recitation
+ * Get audio URL for a specific ayah using a given reciter
  */
-export function getAyahAudioUrl(surahId: number, ayahInSurah: number): string {
+export function getAyahAudioUrl(surahId: number, ayahInSurah: number, reciterId: string = "ar.alafasy"): string {
   const globalNum = getGlobalAyahNumber(surahId, ayahInSurah);
-  return `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${globalNum}.mp3`;
+  return `https://cdn.islamic.network/quran/audio/128/${reciterId}/${globalNum}.mp3`;
 }
