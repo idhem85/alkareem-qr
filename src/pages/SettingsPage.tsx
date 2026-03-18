@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
+import { RECITERS } from "@/lib/quranAudio";
 
 const languages = [
   { code: "fr", label: "FR", flag: "🇫🇷" },
