@@ -117,7 +117,7 @@ export default function Index() {
     : null;
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6 space-y-7 animate-fade-in">
+    <div className="max-w-2xl mx-auto px-4 py-6 space-y-5 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between py-3">
         <img src="/logo.png" alt="تراتيل — Tarātīl" className="h-24" />
@@ -153,7 +153,7 @@ export default function Index() {
 
       {/* Continue Reading */}
       {lastSurah && readingProgress && (
-        <Link to={`/surah/${lastSurah.id}`}>
+        <Link to={`/surah/${lastSurah.id}`} className="block pt-3">
           <Card className="p-4 hover-scale border-border/50 bg-card">
             <div className="flex items-center gap-3">
               <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
