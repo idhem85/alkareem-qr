@@ -31,7 +31,8 @@ export function AudioPlayer({ hideUI = false }: { hideUI?: boolean }) {
 
   useEffect(() => {
     if (!audioRef.current || !audio.currentSurahId || !audio.currentAyah) return;
-    const url = getAyahAudioUrl(audio.currentSurahId, audio.currentAyah);
+    const reciterId = RECITERS.find(r => r.name === settings.reciter)?.id || "ar.alafasy";
+    const url = getAyahAudioUrl(audio.currentSurahId, audio.currentAyah, reciterId);
     audioRef.current.src = url;
     if (audio.isPlaying) {
       audioRef.current.play().catch(() => {});
