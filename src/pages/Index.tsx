@@ -147,7 +147,9 @@ export default function Index() {
       </Link>
 
       {/* Prayer Times */}
-      <PrayerTimes />
+      <div>
+        <PrayerTimes />
+      </div>
 
       {/* Continue Reading */}
       {lastSurah && readingProgress && (
