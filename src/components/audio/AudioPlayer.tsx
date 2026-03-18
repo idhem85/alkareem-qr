@@ -5,10 +5,10 @@ import { surahs } from "@/data/surahs";
 import { toArabicNumber } from "@/data/ayahs";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { getAyahAudioUrl } from "@/lib/quranAudio";
+import { getAyahAudioUrl, RECITERS } from "@/lib/quranAudio";
 
 export function AudioPlayer({ hideUI = false }: { hideUI?: boolean }) {
-  const { audio, togglePlayback, setAudio } = useApp();
+  const { audio, togglePlayback, setAudio, settings } = useApp();
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -31,12 +31,13 @@ export function AudioPlayer({ hideUI = false }: { hideUI?: boolean }) {
 
   useEffect(() => {
     if (!audioRef.current || !audio.currentSurahId || !audio.currentAyah) return;
-    const url = getAyahAudioUrl(audio.currentSurahId, audio.currentAyah);
+    const reciterId = RECITERS.find(r => r.name === settings.reciter)?.id || "ar.alafasy";
+    const url = getAyahAudioUrl(audio.currentSurahId, audio.currentAyah, reciterId);
     audioRef.current.src = url;
     if (audio.isPlaying) {
       audioRef.current.play().catch(() => {});
     }
-  }, [audio.currentSurahId, audio.currentAyah]);
+  }, [audio.currentSurahId, audio.currentAyah, settings.reciter]);
 
   useEffect(() => {
     if (!audioRef.current || !audio.currentSurahId) return;
