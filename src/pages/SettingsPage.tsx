@@ -205,6 +205,34 @@ export default function SettingsPage() {
             <span className="text-xs text-muted-foreground">{settings.reciter}</span>
           </div>
         </Card>
+
+        {/* Install PWA */}
+        <Card className="p-3">
+          {isInstalled ? (
+            <div className="flex items-center gap-2 text-sm font-medium text-green-600">
+              <Check className="h-4 w-4" />
+              {t.installed}
+            </div>
+          ) : isIOS ? (
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Download className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm font-medium">{t.installApp}</span>
+              </div>
+              <p className="text-xs text-muted-foreground">{t.iosHint}</p>
+            </div>
+          ) : (
+            <Button
+              variant="outline"
+              className="w-full gap-2"
+              onClick={handleInstall}
+              disabled={!deferredPrompt}
+            >
+              <Download className="h-4 w-4" />
+              {t.installApp}
+            </Button>
+          )}
+        </Card>
       </div>
     </div>
   );
