@@ -225,12 +225,26 @@ export default function SettingsPage() {
 
         {/* Reciter */}
         <Card className="p-3">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium flex items-center gap-1.5">
+          <div className="flex items-center justify-between gap-3">
+            <span className="text-sm font-medium flex items-center gap-1.5 shrink-0">
               <BookOpen className="h-3.5 w-3.5 text-muted-foreground" />
               {t.reciter}
             </span>
-            <span className="text-xs text-muted-foreground">{settings.reciter}</span>
+            <Select
+              value={settings.reciter}
+              onValueChange={(v) => updateSettings({ reciter: v })}
+            >
+              <SelectTrigger className="h-8 text-xs w-[200px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {RECITERS.map(r => (
+                  <SelectItem key={r.id} value={r.name} className="text-xs">
+                    {r.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </Card>
 
