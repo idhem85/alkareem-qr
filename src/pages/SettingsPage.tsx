@@ -68,9 +68,36 @@ export default function SettingsPage() {
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
   const labels = {
-    fr: { title: "Réglages", language: "Langue", appearance: "Apparence", typography: "Typographie", fontSize: "Taille du texte", translation: "Traduction", showTranslation: "Afficher la traduction", reciter: "Récitateur", prayerZone: "Fuseau horaire des prières", installApp: "Enregistrer sur mon écran d'accueil", installed: "Application installée", iosHint: "Appuie sur le bouton Partager puis « Sur l'écran d'accueil »" },
-    ar: { title: "الإعدادات", language: "اللغة", appearance: "المظهر", typography: "الخط", fontSize: "حجم الخط", translation: "الترجمة", showTranslation: "إظهار الترجمة", reciter: "القارئ", prayerZone: "المنطقة الزمنية للصلاة", installApp: "حفظ على الشاشة الرئيسية", installed: "التطبيق مثبّت", iosHint: "اضغط على زر المشاركة ثم « إضافة إلى الشاشة الرئيسية »" },
-    en: { title: "Settings", language: "Language", appearance: "Appearance", typography: "Typography", fontSize: "Font size", translation: "Translation", showTranslation: "Show translation", reciter: "Reciter", prayerZone: "Prayer timezone", installApp: "Add to Home Screen", installed: "App installed", iosHint: "Tap the Share button then 'Add to Home Screen'" },
+    fr: {
+      title: "Réglages", language: "Langue", appearance: "Apparence", typography: "Typographie", fontSize: "Taille du texte", translation: "Traduction", showTranslation: "Afficher la traduction", reciter: "Récitateur", prayerZone: "Fuseau horaire des prières",
+      installApp: "Installer l'application",
+      installDesc: "Accédez à Al Kareem directement depuis votre écran d'accueil",
+      installed: "Application installée ✓",
+      installBtn: "Installer",
+      iosStep1: "Appuyez sur l'icône Partager",
+      iosStep2: "Sélectionnez « Sur l'écran d'accueil »",
+      iosStep3: "Appuyez sur « Ajouter »",
+    },
+    ar: {
+      title: "الإعدادات", language: "اللغة", appearance: "المظهر", typography: "الخط", fontSize: "حجم الخط", translation: "الترجمة", showTranslation: "إظهار الترجمة", reciter: "القارئ", prayerZone: "المنطقة الزمنية للصلاة",
+      installApp: "تثبيت التطبيق",
+      installDesc: "افتح القرآن الكريم مباشرة من شاشتك الرئيسية",
+      installed: "التطبيق مثبّت ✓",
+      installBtn: "تثبيت",
+      iosStep1: "اضغط على أيقونة المشاركة",
+      iosStep2: "اختر « إضافة إلى الشاشة الرئيسية »",
+      iosStep3: "اضغط « إضافة »",
+    },
+    en: {
+      title: "Settings", language: "Language", appearance: "Appearance", typography: "Typography", fontSize: "Font size", translation: "Translation", showTranslation: "Show translation", reciter: "Reciter", prayerZone: "Prayer timezone",
+      installApp: "Install App",
+      installDesc: "Access Al Kareem directly from your home screen",
+      installed: "App installed ✓",
+      installBtn: "Install",
+      iosStep1: "Tap the Share icon",
+      iosStep2: "Select 'Add to Home Screen'",
+      iosStep3: "Tap 'Add'",
+    },
   };
   const t = labels[lang as keyof typeof labels] || labels.fr;
 
