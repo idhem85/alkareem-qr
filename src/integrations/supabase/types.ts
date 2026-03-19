@@ -14,7 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      app_config: {
+        Row: {
+          created_at: string | null
+          key: string
+          value: string
+        }
+        Insert: {
+          created_at?: string | null
+          key: string
+          value: string
+        }
+        Update: {
+          created_at?: string | null
+          key?: string
+          value?: string
+        }
+        Relationships: []
+      }
+      push_subscriptions: {
+        Row: {
+          auth: string
+          created_at: string | null
+          endpoint: string
+          id: string
+          is_active: boolean
+          notification_hour: number
+          notification_minute: number
+          p256dh: string
+          timezone: string
+          updated_at: string | null
+        }
+        Insert: {
+          auth: string
+          created_at?: string | null
+          endpoint: string
+          id?: string
+          is_active?: boolean
+          notification_hour?: number
+          notification_minute?: number
+          p256dh: string
+          timezone?: string
+          updated_at?: string | null
+        }
+        Update: {
+          auth?: string
+          created_at?: string | null
+          endpoint?: string
+          id?: string
+          is_active?: boolean
+          notification_hour?: number
+          notification_minute?: number
+          p256dh?: string
+          timezone?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

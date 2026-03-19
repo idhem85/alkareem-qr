@@ -4,6 +4,7 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Moon, Sun, Type, Languages, BookOpen, Globe, MapPin, Download, Check, Share, Plus, SquarePlus, Smartphone } from "lucide-react";
+import NotificationSettingsCard from "@/components/settings/NotificationSettingsCard";
 import { cn } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -247,6 +248,9 @@ export default function SettingsPage() {
             </Select>
           </div>
         </Card>
+
+        {/* Notifications */}
+        <NotificationSettingsCard lang={lang} timezone={settings.prayerTimezone || "auto"} />
 
         {/* Install PWA */}
         <Card className="p-4 border-primary/20">
