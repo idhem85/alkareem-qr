@@ -249,6 +249,9 @@ export default function SettingsPage() {
           </div>
         </Card>
 
+        {/* Notifications */}
+        <NotificationSettingsCard lang={lang} timezone={settings.prayerTimezone || "auto"} />
+
         {/* Install PWA */}
         <Card className="p-4 border-primary/20">
           <div className="flex items-start gap-3">
