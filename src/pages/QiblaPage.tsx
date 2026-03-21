@@ -176,8 +176,7 @@ export default function QiblaPage() {
         <div className="relative w-72 h-72 sm:w-80 sm:h-80">
           {/* Compass dial */}
           <div
-            className="absolute inset-0 transition-transform duration-300 ease-out"
-            style={{ transform: hasCompass ? `rotate(${compassRotation}deg)` : "rotate(0deg)" }}
+            className="absolute inset-0"
           >
             <svg viewBox="0 0 300 300" className="w-full h-full">
               {/* Outer ring */}
@@ -232,8 +231,8 @@ export default function QiblaPage() {
             <div className="relative w-full h-full flex items-center justify-center">
               {/* Arrow pointing up (to Qibla direction) */}
               <div className="absolute top-4 flex flex-col items-center gap-1">
-                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-lg">
-                  <span className="text-[10px] font-bold text-primary-foreground">☪</span>
+                <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center shadow-lg">
+                  <span className="text-base leading-none">🕋</span>
                 </div>
                 <div className="w-0.5 h-16 bg-gradient-to-b from-primary to-primary/20 rounded-full" />
               </div>
@@ -244,7 +243,7 @@ export default function QiblaPage() {
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="w-20 h-20 rounded-full bg-background border-2 border-primary/30 flex flex-col items-center justify-center shadow-md">
               <Compass className="h-5 w-5 text-primary mb-0.5" />
-              <span className="text-[10px] font-semibold text-muted-foreground">{t.kaaba}</span>
+              <span className="text-[10px] font-semibold text-muted-foreground">Qibla</span>
             </div>
           </div>
         </div>
