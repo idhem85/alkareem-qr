@@ -176,8 +176,7 @@ export default function QiblaPage() {
         <div className="relative w-72 h-72 sm:w-80 sm:h-80">
           {/* Compass dial */}
           <div
-            className="absolute inset-0 transition-transform duration-300 ease-out"
-            style={{ transform: hasCompass ? `rotate(${compassRotation}deg)` : "rotate(0deg)" }}
+            className="absolute inset-0"
           >
             <svg viewBox="0 0 300 300" className="w-full h-full">
               {/* Outer ring */}
