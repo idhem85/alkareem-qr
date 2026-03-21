@@ -46,11 +46,35 @@ export function usePushNotifications(timezone: string) {
       try {
         const reg = await navigator.serviceWorker.ready;
         const sub = await reg.pushManager.getSubscription();
+        
+        let savedHour = 8;
+        let savedMinute = 0;
+        
+        if (sub) {
+          // Fetch saved settings from backend
+          try {
+            const subJson = sub.toJSON();
+            const { data } = await supabase
+              .from("push_subscriptions")
+              .select("notification_hour, notification_minute")
+              .eq("endpoint", subJson.endpoint!)
+              .maybeSingle();
+            if (data) {
+              savedHour = data.notification_hour;
+              savedMinute = data.notification_minute;
+            }
+          } catch (e) {
+            console.warn("Could not fetch saved notification time:", e);
+          }
+        }
+        
         setSettings((s) => ({
           ...s,
           isSupported: true,
           isSubscribed: !!sub,
           permission: Notification.permission,
+          hour: savedHour,
+          minute: savedMinute,
           loading: false,
         }));
       } catch {

@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
 interface NotificationSettingsCardProps {
@@ -59,12 +59,17 @@ export default function NotificationSettingsCard({ lang, timezone }: Notificatio
     isSupported,
     permission,
     loading,
+    hour: savedHour,
     subscribe,
     unsubscribe,
     updateTime,
   } = usePushNotifications(timezone);
 
-  const [selectedHour, setSelectedHour] = useState(8);
+  const [selectedHour, setSelectedHour] = useState(savedHour);
+
+  useEffect(() => {
+    setSelectedHour(savedHour);
+  }, [savedHour]);
 
   if (!isSupported) {
     return (
