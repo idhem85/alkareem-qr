@@ -11,6 +11,7 @@ import MushafReader from "./pages/MushafReader";
 import SearchPage from "./pages/SearchPage";
 import BookmarksPage from "./pages/BookmarksPage";
 import SettingsPage from "./pages/SettingsPage";
+import QiblaPage from "./pages/QiblaPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
               <Route path="/search" element={<SearchPage />} />
               <Route path="/bookmarks" element={<BookmarksPage />} />
               <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/qibla" element={<QiblaPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AppLayout>
