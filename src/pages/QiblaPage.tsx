@@ -232,8 +232,8 @@ export default function QiblaPage() {
             <div className="relative w-full h-full flex items-center justify-center">
               {/* Arrow pointing up (to Qibla direction) */}
               <div className="absolute top-4 flex flex-col items-center gap-1">
-                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-lg">
-                  <span className="text-[10px] font-bold text-primary-foreground">☪</span>
+                <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center shadow-lg">
+                  <span className="text-base leading-none">🕋</span>
                 </div>
                 <div className="w-0.5 h-16 bg-gradient-to-b from-primary to-primary/20 rounded-full" />
               </div>
