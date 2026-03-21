@@ -11,6 +11,7 @@ import MushafReader from "./pages/MushafReader";
 import SearchPage from "./pages/SearchPage";
 import BookmarksPage from "./pages/BookmarksPage";
 import SettingsPage from "./pages/SettingsPage";
+import QiblaPage from "./pages/QiblaPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
