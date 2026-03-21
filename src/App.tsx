@@ -31,6 +31,7 @@ const App = () => (
               <Route path="/search" element={<SearchPage />} />
               <Route path="/bookmarks" element={<BookmarksPage />} />
               <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/qibla" element={<QiblaPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AppLayout>

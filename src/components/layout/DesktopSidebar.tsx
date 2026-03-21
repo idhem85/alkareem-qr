@@ -1,4 +1,4 @@
-import { Home, Search, Bookmark, Settings, BookOpen, ChevronLeft, ChevronRight } from "lucide-react";
+import { Home, Search, Bookmark, Settings, BookOpen, ChevronLeft, ChevronRight, Compass } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 const navItems = [
   { icon: Home, label: "Accueil", path: "/" },
   { icon: BookOpen, label: "Sourates", path: "/surahs" },
+  { icon: Compass, label: "Qibla", path: "/qibla" },
   { icon: Search, label: "Recherche", path: "/search" },
   { icon: Bookmark, label: "Signets", path: "/bookmarks" },
   { icon: Settings, label: "Réglages", path: "/settings" },
