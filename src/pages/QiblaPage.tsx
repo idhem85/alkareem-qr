@@ -244,7 +244,7 @@ export default function QiblaPage() {
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="w-20 h-20 rounded-full bg-background border-2 border-primary/30 flex flex-col items-center justify-center shadow-md">
               <Compass className="h-5 w-5 text-primary mb-0.5" />
-              <span className="text-[10px] font-semibold text-muted-foreground">{t.kaaba}</span>
+              <span className="text-[10px] font-semibold text-muted-foreground">Qibla</span>
             </div>
           </div>
         </div>
