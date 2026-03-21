@@ -175,8 +175,13 @@ export default function QiblaPage() {
       <div className="relative flex items-center justify-center">
         <div className="relative w-72 h-72 sm:w-80 sm:h-80">
           {/* Compass dial */}
+          {/* Compass dial - rotates with device heading */}
           <div
             className="absolute inset-0"
+            style={{
+              transform: hasCompass ? `rotate(${compassRotation}deg)` : undefined,
+              transition: 'transform 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
+            }}
           >
             <svg viewBox="0 0 300 300" className="w-full h-full">
               {/* Outer ring */}
@@ -219,22 +224,27 @@ export default function QiblaPage() {
             </svg>
           </div>
 
-          {/* Qibla indicator arrow — stays pointing to Qibla */}
+          {/* Qibla indicator arrow — stays fixed pointing to Qibla */}
           <div
-            className="absolute inset-0 flex items-center justify-center transition-transform duration-300 ease-out"
+            className="absolute inset-0 flex items-center justify-center"
             style={{
               transform: hasCompass
                 ? `rotate(${qiblaRotation}deg)`
                 : `rotate(${qiblaBearing ?? 0}deg)`,
+              transition: 'transform 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
             }}
           >
             <div className="relative w-full h-full flex items-center justify-center">
               {/* Arrow pointing up (to Qibla direction) */}
-              <div className="absolute top-4 flex flex-col items-center gap-1">
-                <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center shadow-lg">
-                  <span className="text-base leading-none">🕋</span>
+              <div className="absolute top-3 flex flex-col items-center gap-0.5">
+                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/30 ring-2 ring-primary/20">
+                  <span className="text-lg leading-none">🕋</span>
                 </div>
-                <div className="w-0.5 h-16 bg-gradient-to-b from-primary to-primary/20 rounded-full" />
+                <div className="w-0.5 h-20 bg-gradient-to-b from-primary via-primary/40 to-transparent rounded-full" />
+              </div>
+              {/* Opposite tail */}
+              <div className="absolute bottom-8 flex flex-col items-center">
+                <div className="w-0.5 h-10 bg-gradient-to-t from-muted-foreground/20 to-transparent rounded-full" />
               </div>
             </div>
           </div>
