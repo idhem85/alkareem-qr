@@ -59,12 +59,17 @@ export default function NotificationSettingsCard({ lang, timezone }: Notificatio
     isSupported,
     permission,
     loading,
+    hour: savedHour,
     subscribe,
     unsubscribe,
     updateTime,
   } = usePushNotifications(timezone);
 
-  const [selectedHour, setSelectedHour] = useState(8);
+  const [selectedHour, setSelectedHour] = useState(savedHour);
+
+  useEffect(() => {
+    setSelectedHour(savedHour);
+  }, [savedHour]);
 
   if (!isSupported) {
     return (
