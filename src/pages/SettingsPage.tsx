@@ -299,6 +299,10 @@ export default function SettingsPage() {
           )}
         </Card>
       </div>
+
+      <p className="text-center text-xs text-muted-foreground mt-8 mb-2">
+        Al Kareem — by M.A 2026 — All Rights Reserved
+      </p>
     </div>
   );
 }
