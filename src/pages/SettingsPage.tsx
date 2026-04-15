@@ -333,7 +333,7 @@ export default function SettingsPage() {
                   : lang === "en"
                   ? "Discover Al Kareem — The Holy Quran app"
                   : "Découvrez Al Kareem — Le Saint Coran",
-                url: "https://alkareem-qr.lovable.app",
+                url: "https://alkareem-qr.netlify.app/",
               };
               if (navigator.share) {
                 try { await navigator.share(shareData); } catch {}
