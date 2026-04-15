@@ -85,7 +85,7 @@ export function prefetchSurah(surahId: number) {
           id: a.number,
           surahId,
           numberInSurah: a.numberInSurah,
-          textArabic: a.text,
+          textArabic: cleanQuranicText(a.text),
           translationFr: frAyahs[i]?.text || "",
           translationEn: enAyahs[i]?.text || "",
           tafsir: tafsirArAyahs[i]?.text || "",
