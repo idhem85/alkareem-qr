@@ -3,6 +3,12 @@ import { ayahsBySurah, type Ayah } from "@/data/ayahs";
 
 const cache: Record<number, Ayah[]> = {};
 
+// Remove Quranic annotation marks that render as black dots with some fonts
+// U+06D6-U+06DC (waqf signs), U+06DE (rub el hizb), U+06DF-U+06E0, U+06ED
+function cleanQuranicText(text: string): string {
+  return text.replace(/[\u06D6-\u06DC\u06DE-\u06E0\u06ED]/g, '');
+}
+
 export function useAyahs(surahId: number) {
   const [ayahs, setAyahs] = useState<Ayah[]>(cache[surahId] || ayahsBySurah[surahId] || []);
   const [loading, setLoading] = useState(!cache[surahId] && !ayahsBySurah[surahId]);
@@ -35,7 +41,7 @@ export function useAyahs(surahId: number) {
             id: a.number,
             surahId,
             numberInSurah: a.numberInSurah,
-            textArabic: a.text,
+            textArabic: cleanQuranicText(a.text),
             translationFr: frAyahs[i]?.text || "",
             translationEn: enAyahs[i]?.text || "",
             tafsir: tafsirArAyahs[i]?.text || "",
@@ -79,7 +85,7 @@ export function prefetchSurah(surahId: number) {
           id: a.number,
           surahId,
           numberInSurah: a.numberInSurah,
-          textArabic: a.text,
+          textArabic: cleanQuranicText(a.text),
           translationFr: frAyahs[i]?.text || "",
           translationEn: enAyahs[i]?.text || "",
           tafsir: tafsirArAyahs[i]?.text || "",
