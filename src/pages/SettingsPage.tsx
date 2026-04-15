@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Moon, Sun, Type, Languages, BookOpen, Globe, MapPin, Download, Check, Share, Plus, SquarePlus, Smartphone } from "lucide-react";
+import { Moon, Sun, Type, Languages, BookOpen, Globe, MapPin, Download, Check, Share, Plus, SquarePlus, Smartphone, Share2, Heart } from "lucide-react";
 import NotificationSettingsCard from "@/components/settings/NotificationSettingsCard";
 import { cn } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -309,6 +309,44 @@ export default function SettingsPage() {
               {t.installBtn}
             </Button>
           )}
+        </Card>
+
+        {/* Share App */}
+        <Card className="p-4 border-accent/20">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
+              <Heart className="h-5 w-5 text-accent" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold">{t.shareApp}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{t.shareDesc}</p>
+            </div>
+          </div>
+          <Button
+            className="w-full mt-3 gap-2"
+            variant="outline"
+            onClick={async () => {
+              const shareData = {
+                title: "Al Kareem — القرآن الكريم",
+                text: lang === "ar" 
+                  ? "اكتشف تطبيق القرآن الكريم — Al Kareem" 
+                  : lang === "en"
+                  ? "Discover Al Kareem — The Holy Quran app"
+                  : "Découvrez Al Kareem — Le Saint Coran",
+                url: "https://alkareem-qr.lovable.app",
+              };
+              if (navigator.share) {
+                try { await navigator.share(shareData); } catch {}
+              } else {
+                await navigator.clipboard.writeText(shareData.url);
+                const { toast } = await import("@/hooks/use-toast");
+                toast({ title: t.shareCopied });
+              }
+            }}
+          >
+            <Share2 className="h-4 w-4" />
+            {t.shareBtn}
+          </Button>
         </Card>
       </div>
 
