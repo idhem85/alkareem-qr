@@ -79,6 +79,10 @@ export default function SettingsPage() {
       iosStep1: "Appuyez sur l'icône Partager",
       iosStep2: "Sélectionnez « Sur l'écran d'accueil »",
       iosStep3: "Appuyez sur « Ajouter »",
+      shareApp: "Partager l'application",
+      shareDesc: "Faites découvrir Al Kareem à vos proches",
+      shareBtn: "Partager",
+      shareCopied: "Lien copié !",
     },
     ar: {
       title: "الإعدادات", language: "اللغة", appearance: "المظهر", typography: "الخط", fontSize: "حجم الخط", translation: "الترجمة", showTranslation: "إظهار الترجمة", reciter: "القارئ", prayerZone: "المنطقة الزمنية للصلاة",
@@ -89,6 +93,10 @@ export default function SettingsPage() {
       iosStep1: "اضغط على أيقونة المشاركة",
       iosStep2: "اختر « إضافة إلى الشاشة الرئيسية »",
       iosStep3: "اضغط « إضافة »",
+      shareApp: "مشاركة التطبيق",
+      shareDesc: "شارك القرآن الكريم مع أحبائك",
+      shareBtn: "مشاركة",
+      shareCopied: "تم نسخ الرابط!",
     },
     en: {
       title: "Settings", language: "Language", appearance: "Appearance", typography: "Typography", fontSize: "Font size", translation: "Translation", showTranslation: "Show translation", reciter: "Reciter", prayerZone: "Prayer timezone",
@@ -99,6 +107,10 @@ export default function SettingsPage() {
       iosStep1: "Tap the Share icon",
       iosStep2: "Select 'Add to Home Screen'",
       iosStep3: "Tap 'Add'",
+      shareApp: "Share the app",
+      shareDesc: "Share Al Kareem with your loved ones",
+      shareBtn: "Share",
+      shareCopied: "Link copied!",
     },
   };
   const t = labels[lang as keyof typeof labels] || labels.fr;
