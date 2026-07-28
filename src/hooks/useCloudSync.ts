@@ -51,7 +51,7 @@ export function useCloudSync() {
 
   /** Fetch all bookmarks for this device from Supabase */
   const fetchBookmarks = useCallback(async (): Promise<BookmarkRow[]> => {
-    if (!enabled) return [];
+    if (!enabled || !supabase) return [];
     try {
       const { data, error } = await supabase
         .from("bookmarks")
@@ -70,7 +70,7 @@ export function useCloudSync() {
   /** Save a single bookmark to Supabase */
   const saveBookmark = useCallback(
     async (surahId: number, ayahNumber: number, note?: string) => {
-      if (!enabled) return;
+      if (!enabled || !supabase) return;
       try {
         const { error } = await supabase.from("bookmarks").upsert(
           {
@@ -92,7 +92,7 @@ export function useCloudSync() {
   /** Remove a bookmark from Supabase */
   const removeBookmark = useCallback(
     async (surahId: number, ayahNumber: number) => {
-      if (!enabled) return;
+      if (!enabled || !supabase) return;
       try {
         await supabase
           .from("bookmarks")
@@ -112,7 +112,7 @@ export function useCloudSync() {
   /** Save reading progress to cloud */
   const saveProgress = useCallback(
     async (surahId: number, ayahNumber: number) => {
-      if (!enabled) return;
+      if (!enabled || !supabase) return;
       try {
         await supabase.from("reading_progress").upsert(
           {
@@ -131,7 +131,7 @@ export function useCloudSync() {
 
   /** Fetch reading progress from cloud */
   const fetchProgress = useCallback(async (): Promise<ProgressRow[]> => {
-    if (!enabled) return [];
+    if (!enabled || !supabase) return [];
     try {
       const { data, error } = await supabase
         .from("reading_progress")
@@ -169,7 +169,7 @@ export function useCloudSync() {
           note: b.note || null,
         }));
 
-        if (upserts.length > 0) {
+        if (upserts.length > 0 && supabase) {
           for (let i = 0; i < upserts.length; i += 50) {
             await supabase.from("bookmarks").upsert(upserts.slice(i, i + 50), {
               onConflict: "device_id, surah_id, ayah_number",
@@ -178,7 +178,7 @@ export function useCloudSync() {
         }
 
         // 2. Push local progress
-        if (localProgress) {
+        if (localProgress && supabase) {
           await supabase.from("reading_progress").upsert(
             {
               device_id: deviceId.current,

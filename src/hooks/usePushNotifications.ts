@@ -50,7 +50,7 @@ export function usePushNotifications(timezone: string) {
         let savedHour = 8;
         let savedMinute = 0;
         
-        if (sub) {
+        if (sub && supabase) {
           // Fetch saved settings from backend
           try {
             const subJson = sub.toJSON();
@@ -97,6 +97,7 @@ export function usePushNotifications(timezone: string) {
         }
 
         // Get VAPID public key from edge function
+        if (!supabase) throw new Error("Supabase n'est pas configuré");
         const { data: vapidData, error: vapidError } = await supabase.functions.invoke(
           "get-vapid-key"
         );
@@ -150,7 +151,7 @@ export function usePushNotifications(timezone: string) {
     try {
       const reg = await navigator.serviceWorker.ready;
       const sub = await reg.pushManager.getSubscription();
-      if (sub) {
+      if (sub && supabase) {
         // Deactivate on backend
         const subJson = sub.toJSON();
         await supabase.functions.invoke("push-subscribe", {
@@ -181,6 +182,7 @@ export function usePushNotifications(timezone: string) {
         if (!sub) return false;
 
         const subJson = sub.toJSON();
+        if (!supabase) return false;
         await supabase.functions.invoke("push-subscribe", {
           body: {
             subscription: {
