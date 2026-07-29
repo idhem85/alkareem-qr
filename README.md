@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/logo.png" alt="Al Kareem Logo" height="96" />
+  <img src="https://raw.githubusercontent.com/idhem85/alkareem-qr/main/public/logo.png" alt="Al Kareem Logo" height="96" />
 </p>
 
 <h1 align="center">المصحف Al Kareem</h1>
@@ -26,7 +26,7 @@
   <img src="https://img.shields.io/badge/Tailwind_CSS-3.4-06B6D4?logo=tailwindcss" alt="Tailwind CSS" />
   <img src="https://img.shields.io/badge/PWA-✅-5A0FC8" alt="PWA" />
   <img src="https://img.shields.io/badge/Cloudflare_Pages-✅-F38020?logo=cloudflare" alt="Cloudflare Pages" />
-  <img src="https://img.shields.io/badge/ langue-arabe-🇸🇦" alt="Arabic Support" />
+  <img src="https://img.shields.io/badge/langue-arabe-success" alt="Arabic Support" />
 </p>
 
 <p align="center" dir="rtl">
@@ -140,8 +140,10 @@ cd alkareem-qr
 # Installer les dépendances
 npm install
 
-# Copier le fichier d'environnement
-cp .env.example .env
+# Créer le fichier d'environnement
+# (copie les variables ci-dessous dans un fichier .env)
+# VITE_SUPABASE_URL=votre_url
+# VITE_SUPABASE_PUBLISHABLE_KEY=votre_cle
 
 # Lancer le serveur de développement
 npm run dev
